@@ -18,7 +18,7 @@
 
 | Campo | Tipo | Obrigatório | Observação |
 |-------|------|------------|-----------|
-| ID do Formulário adicional | ObjectId | Sim | Da URL do sistema (Editais → Formulários adicionais → Visualizar) |
+| ID do Formulário adicional | ObjectId | Sim | Da URL do sistema (Ciclos → Formulários adicionais → Visualizar) |
 | Nova data | String | Sim | Formato ISO, +3h (ex: `2026-03-12T02:59:59.999+00:00`) |
 
 ## Fluxo de execução (por variante)

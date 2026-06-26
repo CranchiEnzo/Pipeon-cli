@@ -1,6 +1,6 @@
 # Alterar data limite para envio de recurso de documentação
 
-**Núcleo:** Editais
+**Núcleo:** Ciclos
 **Collection afetada:** `notices`
 
 ## Campos alterados
@@ -13,7 +13,7 @@
 
 | Campo | Tipo | Obrigatório | Observação |
 |-------|------|------------|-----------|
-| ID do Edital | ObjectId | Sim | Da URL do sistema |
+| ID do Ciclo | ObjectId | Sim | Da URL do sistema |
 | Nova data limite | String | Sim | Formato ISO, +3h (ex: `2023-06-06T02:59:59.999+00:00`) |
 
 ## Fluxo de execução

@@ -20,10 +20,10 @@ async function main() {
 
   const notice = await db.collection('notices').findOne({ _id: new ObjectId(NOTICE_ID) });
   if (!notice) {
-    console.error('Edital nao encontrado: ' + NOTICE_ID);
+    console.error('Ciclo nao encontrado: ' + NOTICE_ID);
     await client.close(); return;
   }
-  console.log('Edital: ' + (notice.configuration?.name || notice._id));
+  console.log('Ciclo: ' + (notice.configuration?.name || notice._id));
 
   const evaluators = notice.projectEvaluators || [];
 

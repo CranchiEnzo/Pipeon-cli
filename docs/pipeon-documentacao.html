@@ -314,7 +314,7 @@ details p,details ul{margin-top:var(--space-3);font-size:var(--fs-base)}
   <h3>/procedure/reset-evaluations — Reset de Avaliacoes</h3>
   <p>Procedimento especifico com logica propria. Fluxo em 4 etapas com stepper visual:</p>
   <ol class="steps">
-    <li><strong>Identificacao</strong><span>Numero do chamado (ticket) + ObjectId do edital (<code>notice</code>)</span></li>
+    <li><strong>Identificacao</strong><span>Numero do chamado (ticket) + ObjectId do ciclo (<code>notice</code>)</span></li>
     <li><strong>Selecao do avaliador</strong><span>Busca avaliadores via <code>aggregate</code> na colecao <code>evaluations</code> do banco target-database</span></li>
     <li><strong>Confirmacao</strong><span>Dry-run mostrando status atuais e campos que serao removidos. Opcao de agendar para depois.</span></li>
     <li><strong>Execucao</strong><span>Backup ZIP local + backup no banco pipeon + reset de status + limpeza de campos phaseForm</span></li>
@@ -517,7 +517,7 @@ details p,details ul{margin-top:var(--space-3);font-size:var(--fs-base)}
   <span class="tok-prop">inputs</span>: [
     {
       <span class="tok-prop">key</span>:      <span class="tok-str">"noticeId"</span>,
-      <span class="tok-prop">label</span>:    <span class="tok-str">"ObjectId do edital"</span>,
+      <span class="tok-prop">label</span>:    <span class="tok-str">"ObjectId do ciclo"</span>,
       <span class="tok-prop">type</span>:     <span class="tok-str">"objectId"</span>,  <span class="tok-comment">// "string" | "objectId"</span>
       <span class="tok-prop">required</span>: <span class="tok-key">true</span>
     }

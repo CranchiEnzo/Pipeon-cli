@@ -1,4 +1,4 @@
-# Regerar termo de execução após assinatura do proponente
+# Regerar termo de execução após assinatura do solicitante
 
 **Núcleo:** Contratação
 **Collection afetada:** `contractDigital`
@@ -19,7 +19,7 @@ Permite que o sistema regere o termo de execução após ajuste no modelo de doc
 |-------|---------------|
 | `status` | `SIGNATURESENT` |
 
-Executar **após** o termo ser regenerado, para que a secretaria possa assinar.
+Executar **após** o termo ser regenerado, para que a equipe possa assinar.
 
 ## Inputs necessários (ambas as etapas)
 

@@ -537,7 +537,7 @@ function SystemsTab() {
                 <input
                   value={sysForm.description}
                   onChange={(e) => setSysForm((f) => ({ ...f, description: e.target.value }))}
-                  placeholder='ex: "Editais culturais [INTERNAL-SYSTEM]"'
+                  placeholder='ex: "Ciclos culturais [INTERNAL-SYSTEM]"'
                   className="input"
                 />
               </Field>
@@ -1130,7 +1130,7 @@ function ProjectsTab() {
               <input
                 value={form.description}
                 onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
-                placeholder='ex: "Editais culturais [INTERNAL-SYSTEM]"'
+                placeholder='ex: "Ciclos culturais [INTERNAL-SYSTEM]"'
                 className="input"
               />
             </Field>

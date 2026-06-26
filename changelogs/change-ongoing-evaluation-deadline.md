@@ -1,6 +1,6 @@
 # Alterar prazo das Avaliações de projeto em andamento
 
-**Núcleo:** Editais
+**Núcleo:** Ciclos
 **Collection afetada:** `notices`
 
 ## Campos alterados
@@ -13,7 +13,7 @@
 
 | Campo | Tipo | Obrigatório | Observação |
 |-------|------|------------|-----------|
-| ID do Edital | ObjectId | Sim | Da URL do sistema |
+| ID do Ciclo | ObjectId | Sim | Da URL do sistema |
 | Nova data de validade | String | Sim | Formato ISO, +3h |
 
 ## Fluxo de execução
@@ -24,5 +24,5 @@
 
 ## Observações
 
-- Após a atualização, recarregue a página do edital para notar a modificação
+- Após a atualização, recarregue a página do ciclo para notar a modificação
 - O banco está **3h adiantado** em relação ao horário local

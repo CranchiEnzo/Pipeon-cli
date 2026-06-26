@@ -63,7 +63,7 @@ function SeedEvaluationsPage() {
       return;
     }
     if (!noticeId.trim() || noticeId.trim().length !== 24) {
-      setError("ObjectId do edital inválido (deve ter 24 caracteres).");
+      setError("ObjectId do ciclo inválido (deve ter 24 caracteres).");
       return;
     }
     if (!evaluatorEmail.trim()) {
@@ -202,7 +202,7 @@ function SeedEvaluationsPage() {
   return (
     <Shell>
       <DbBadge />
-      <BackLink to="/procedure" search={{ nucleo: "Editais" }} />
+      <BackLink to="/procedure" search={{ nucleo: "Ciclos" }} />
       <BrandHeader subtitle={false} />
 
       {readOnly && <ReadOnlyBanner />}
@@ -224,7 +224,7 @@ function SeedEvaluationsPage() {
                 placeholder="Ex.: 123456"
               />
             </Field>
-            <Field label="ObjectId do edital (notice)">
+            <Field label="ObjectId do ciclo (notice)">
               <input
                 value={noticeId}
                 onChange={(e) => setNoticeId(e.target.value)}
@@ -300,7 +300,7 @@ function SeedEvaluationsPage() {
 
           <dl className="space-y-3 rounded-md border border-border bg-muted/30 p-4 text-sm">
             <Row label="Chamado" value={ticket} />
-            <Row label="Edital (notice)" value={noticeId} mono />
+            <Row label="Ciclo (notice)" value={noticeId} mono />
             <Row label="Avaliador" value={`${evaluatorName} (${evaluatorEmail})`} />
             <Row label="ID do avaliador" value={evaluatorId ?? ""} mono />
             <Row label="Comissão" value={commissionName} />

@@ -1,6 +1,6 @@
-# Retornar Edital para Concluir Etapa de Inscrições
+# Retornar Ciclo para Concluir Etapa de Inscrições
 
-**Núcleo:** Editais
+**Núcleo:** Ciclos
 **Collection afetada:** `notices`
 
 ## Campos alterados
@@ -13,7 +13,7 @@
 
 | Campo | Tipo | Obrigatório |
 |-------|------|------------|
-| ID do Edital | ObjectId | Sim |
+| ID do Ciclo | ObjectId | Sim |
 
 ## Fluxo de execução
 
@@ -23,5 +23,5 @@
 
 ## Observações
 
-- Usar quando o edital foi avançado por engano para Avaliações de Projetos ou de Documentação
-- Após o ajuste, o edital retorna para a etapa de Conclusão das Inscrições
+- Usar quando o ciclo foi avançado por engano para Avaliações de Projetos ou de Documentação
+- Após o ajuste, o ciclo retorna para a etapa de Conclusão das Inscrições

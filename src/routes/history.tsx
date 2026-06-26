@@ -552,7 +552,7 @@ function exportToPdf(entry: HistoryEntry) {
     ${entry.projectName ? `<tr><td>Projeto</td><td>${entry.projectName}</td></tr>` : ""}
     ${affectedRow}
     ${evaluator ? `<tr><td>Avaliador</td><td>${evaluator}</td></tr>` : ""}
-    ${entry.noticeId ? `<tr><td>Edital (ObjectId)</td><td style="font-family:monospace;font-size:12px">${entry.noticeId}</td></tr>` : ""}
+    ${entry.noticeId ? `<tr><td>Ciclo (ObjectId)</td><td style="font-family:monospace;font-size:12px">${entry.noticeId}</td></tr>` : ""}
   </table>
   ${stepsHtml ? `<p class="section">Etapas executadas</p>${stepsHtml}` : ""}
   <div class="footer">Gerado por Pipeon em ${new Date().toLocaleString("pt-BR")}</div>
@@ -735,7 +735,7 @@ function LogCard({ entry }: { entry: HistoryEntry }) {
             {entry.affectedDocs && (
               <InfoRow label="Documentos afetados" value={affectedDocsSummary(entry.affectedDocs)} />
             )}
-            {entry.noticeId && <InfoRow label="Edital (ObjectId)" value={entry.noticeId} mono />}
+            {entry.noticeId && <InfoRow label="Ciclo (ObjectId)" value={entry.noticeId} mono />}
             {entry.projectName && <InfoRow label="Projeto" value={entry.projectName} />}
           </dl>
 

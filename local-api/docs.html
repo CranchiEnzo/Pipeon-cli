@@ -660,7 +660,7 @@ Scheduler     : verificando procedimentos a cada minuto</pre>
 {
   <span class="key">"document"</span>: {
     <span class="key">"_id"</span>: <span class="str">"role_permissions"</span>,
-    <span class="key">"operator"</span>: [<span class="str">"procedure"</span>, <span class="str">"history"</span>, <span class="str">"restore"</span>, <span class="str">"editais"</span>],
+    <span class="key">"operator"</span>: [<span class="str">"procedure"</span>, <span class="str">"history"</span>, <span class="str">"restore"</span>, <span class="str">"ciclos"</span>],
     <span class="key">"user"</span>: [<span class="str">"procedure"</span>, <span class="str">"history"</span>]
   }
 }</pre>
@@ -711,7 +711,7 @@ Scheduler     : verificando procedimentos a cada minuto</pre>
             O servidor conecta simultaneamente ao banco-alvo (para ler as avaliações) e ao banco Pipeon (para salvar o backup). Chamado durante execuções manuais e automáticas (cron).
           </div>
           <div class="param-label">Body (JSON)</div>
-          <div class="param-row"><span class="param-name">noticeId</span><span class="param-req">obrig.</span><span class="param-desc">ObjectId do edital (string hex 24 chars)</span></div>
+          <div class="param-row"><span class="param-name">noticeId</span><span class="param-req">obrig.</span><span class="param-desc">ObjectId do ciclo (string hex 24 chars)</span></div>
           <div class="param-row"><span class="param-name">evaluatorUserId</span><span class="param-req">obrig.</span><span class="param-desc">ObjectId do avaliador</span></div>
           <div class="param-row"><span class="param-name">ticket</span><span class="param-opt">opc.</span><span class="param-desc">Número do chamado</span></div>
           <div class="param-row"><span class="param-name">evaluatorName</span><span class="param-opt">opc.</span><span class="param-desc">Nome do avaliador</span></div>
@@ -783,7 +783,7 @@ Scheduler     : verificando procedimentos a cada minuto</pre>
           <div class="param-row"><span class="param-name">connectionString</span><span class="param-opt">opc.</span><span class="param-desc">MongoDB URI (padrão: localhost:27017)</span></div>
           <div class="param-row"><span class="param-name">filter</span><span class="param-opt">opc.</span><span class="param-desc">Filtro MongoDB. Suporta <span class="inline-code">{"$oid":"..."}</span> e <span class="inline-code">{"$date":"..."}</span></span></div>
           <div class="param-row"><span class="param-name">pipeline</span><span class="param-opt">opc.</span><span class="param-desc">Pipeline de agregação (apenas action aggregate)</span></div>
-          <pre><span class="cmt">// Exemplo — buscar avaliações de um edital</span>
+          <pre><span class="cmt">// Exemplo — buscar avaliações de um ciclo</span>
 <span class="kw">POST</span> <span class="url">/api/mongodb/find</span>
 {
   <span class="key">"database"</span>: <span class="str">"target-database"</span>,

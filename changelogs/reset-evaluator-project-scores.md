@@ -18,11 +18,11 @@
 | Campo | Tipo | Obrigatório | Observação |
 |-------|------|------------|-----------|
 | ID do avaliador | ObjectId | Sim | `noticeEvaluator._id` em `evaluations` |
-| ID do Edital | ObjectId | Sim | Campo `notice` em `evaluations` |
+| ID do Ciclo | ObjectId | Sim | Campo `notice` em `evaluations` |
 
 ## Fluxo de execução
 
-1. **Backup** — salva todos os documentos do avaliador no edital em `pipeon_auto_backups`
+1. **Backup** — salva todos os documentos do avaliador no ciclo em `pipeon_auto_backups`
 2. **updateMany** — aplica o reset em todas as avaliações
 3. **Changelog** — registrado em `pipeon_changelogs`
 
@@ -30,4 +30,4 @@
 
 - Diferente de "Retornar avaliações para pendentes", este procedimento filtra por `noticeEvaluator._id`
   (não por `noticeEvaluator.userId`) conforme o script original
-- Documente a execução no Discord com script + referência ao backup
+- Documente a execução no canal interno com script + referência ao backup

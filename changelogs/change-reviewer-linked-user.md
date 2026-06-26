@@ -1,6 +1,6 @@
-# Alterar Usuário Vinculado ao Parecerista
+# Alterar Usuário Vinculado ao Revisor
 
-**Núcleo:** Pareceristas
+**Núcleo:** Revisores
 **Collection afetada:** `reviewers`
 
 ## Campos alterados
@@ -25,6 +25,6 @@
 ## Observações
 
 - Obtenha os IDs dos usuários acessando a collection `users` e filtrando por e-mail
-- Se o novo usuário já possuir um cadastro de parecerista, pode ser necessário
+- Se o novo usuário já possuir um cadastro de revisor, pode ser necessário
   realizar uma segunda execução trocando os IDs inversamente
-- Valide no sistema se o novo login acessa corretamente o ambiente de parecerista
+- Valide no sistema se o novo login acessa corretamente o ambiente de revisor

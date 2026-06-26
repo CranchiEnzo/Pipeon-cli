@@ -1,6 +1,6 @@
-# Voltar Parecerista para Pendentes de Credenciamento
+# Voltar Revisor para Pendentes de Cadastro
 
-**Núcleo:** Pareceristas
+**Núcleo:** Revisores
 **Collections afetadas:** `reviewers`, `reviewerEvaluations`
 
 ## Passo 1 — reviewers
@@ -19,7 +19,7 @@
 
 | Campo | Tipo | Obrigatório | Observação |
 |-------|------|------------|-----------|
-| userId do parecerista | ObjectId | Sim | Campo `userId` em `reviewers` |
+| userId do revisor | ObjectId | Sim | Campo `userId` em `reviewers` |
 | _id do documento reviewers | ObjectId | Sim | Necessário para filtrar `reviewerEvaluations.reviewerId` |
 
 ## Fluxo de execução
@@ -36,5 +36,5 @@ Acesse a collection `reviewers`, filtre por `{ userId: ObjectId("...") }` e copi
 
 ## Resultado esperado
 
-- Parecerista sai da aba Credenciados
-- Aparece novamente em Pendentes de Credenciamento
+- Revisor sai da aba Cadastrados
+- Aparece novamente em Pendentes de Cadastro

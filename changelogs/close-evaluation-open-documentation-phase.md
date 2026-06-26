@@ -1,6 +1,6 @@
 # Encerrar fase de avaliação de projetos e habilitar fase de documentação
 
-**Núcleo:** Editais
+**Núcleo:** Ciclos
 **Collection afetada:** `notices`
 
 ## Campos alterados
@@ -16,7 +16,7 @@
 
 | Campo | Tipo | Obrigatório |
 |-------|------|------------|
-| ID do Edital | ObjectId | Sim |
+| ID do Ciclo | ObjectId | Sim |
 
 ## Fluxo de execução
 

@@ -162,7 +162,7 @@ function ScheduledPage() {
                     {proc.evaluatorName || proc.evaluatorEmail}
                   </div>
                   <div>
-                    <span className="font-medium text-foreground">Edital:</span>{" "}
+                    <span className="font-medium text-foreground">Ciclo:</span>{" "}
                     <span className="font-mono">{proc.noticeId}</span>
                   </div>
                   <div>

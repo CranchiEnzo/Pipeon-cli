@@ -25,13 +25,13 @@ const procedures = [
   // ── 1 ─────────────────────────────────────────────────────────────────────
   {
     projectId: PROJECT_ID,
-    nucleo: 'Editais',
-    name: 'Reabrir a fase de recurso em edital',
+    nucleo: 'Ciclos',
+    name: 'Reabrir a fase de recurso em ciclo',
     description:
       'Reabre a fase de recurso alterando configuration.status para openForEvaluationsDocument ' +
       'e marcando evaluation.documentEvaluation.appeal.appealfinished como false.',
     inputs: [
-      { key: 'noticeId', label: 'ID do Edital (extraído da URL)', type: 'objectId', required: true },
+      { key: 'noticeId', label: 'ID do Ciclo (extraído da URL)', type: 'objectId', required: true },
     ],
     steps: [
       {
@@ -58,13 +58,13 @@ const procedures = [
   // ── 2 ─────────────────────────────────────────────────────────────────────
   {
     projectId: PROJECT_ID,
-    nucleo: 'Editais',
+    nucleo: 'Ciclos',
     name: 'Alterar data limite para envio de recurso de documentação',
     description:
       'Altera o campo appealEnd em evaluation.documentEvaluation.appeal. ' +
       'Atenção: o banco está 3h adiantado (ex: encerramento às 23h59 local → 2023-06-06T02:59:59.999+00:00 no banco).',
     inputs: [
-      { key: 'noticeId', label: 'ID do Edital (extraído da URL)', type: 'objectId', required: true },
+      { key: 'noticeId', label: 'ID do Ciclo (extraído da URL)', type: 'objectId', required: true },
       {
         key: 'novaData',
         label: 'Nova data limite — formato ISO (+3h) ex: 2023-06-06T02:59:59.999+00:00',
@@ -96,13 +96,13 @@ const procedures = [
   // ── 3 ─────────────────────────────────────────────────────────────────────
   {
     projectId: PROJECT_ID,
-    nucleo: 'Editais',
+    nucleo: 'Ciclos',
     name: 'Alterar prazo das Avaliações de projeto em andamento',
     description:
-      'Altera o campo validityEndProject no edital. ' +
+      'Altera o campo validityEndProject no ciclo. ' +
       'Atenção: o banco está 3h adiantado em relação ao horário local.',
     inputs: [
-      { key: 'noticeId', label: 'ID do Edital (extraído da URL)', type: 'objectId', required: true },
+      { key: 'noticeId', label: 'ID do Ciclo (extraído da URL)', type: 'objectId', required: true },
       {
         key: 'novaData',
         label: 'Nova data de validade — formato ISO (+3h) ex: 2023-06-06T02:59:59.999+00:00',
@@ -134,10 +134,10 @@ const procedures = [
   // ── 4 ─────────────────────────────────────────────────────────────────────
   {
     projectId: PROJECT_ID,
-    nucleo: 'Pareceristas',
-    name: 'Alterar Usuário Vinculado ao Parecerista',
+    nucleo: 'Revisores',
+    name: 'Alterar Usuário Vinculado ao Revisor',
     description:
-      'Transfere o cadastro de parecerista do usuário antigo para o novo. ' +
+      'Transfere o cadastro de revisor do usuário antigo para o novo. ' +
       'Obtenha os IDs dos usuários pela collection users filtrando por e-mail.',
     inputs: [
       {
@@ -283,10 +283,10 @@ const procedures = [
   // ── 6 ─────────────────────────────────────────────────────────────────────
   {
     projectId: PROJECT_ID,
-    nucleo: 'Prestação de Contas',
-    name: 'Disponibilizar Alteração de Projeto quando prestação de contas estiver iniciada',
+    nucleo: 'Fechamento',
+    name: 'Disponibilizar Alteração de Projeto quando fechamento estiver iniciada',
     description:
-      'Altera o status da prestação de contas para NOTIFIED, liberando o campo de alteração de projeto. ' +
+      'Altera o status do fechamento para NOTIFIED, liberando o campo de alteração de projeto. ' +
       'Informe o _id do documento em accountabilityReports.',
     inputs: [
       {
@@ -318,12 +318,12 @@ const procedures = [
   // ── 7 ─────────────────────────────────────────────────────────────────────
   {
     projectId: PROJECT_ID,
-    nucleo: 'Editais',
+    nucleo: 'Ciclos',
     name: 'Encerrar fase de avaliação de projetos e habilitar fase de documentação',
     description:
       'Define configuration.status como completedEvaluationsProject e marca as flags de avaliação como concluídas.',
     inputs: [
-      { key: 'noticeId', label: 'ID do Edital (extraído da URL)', type: 'objectId', required: true },
+      { key: 'noticeId', label: 'ID do Ciclo (extraído da URL)', type: 'objectId', required: true },
     ],
     steps: [
       {
@@ -399,10 +399,10 @@ const procedures = [
     nucleo: 'Contratação',
     name: 'Pular etapa de formulário na contratação',
     description:
-      'Marca todos os contratos do edital como MARKEDFORCONTRACT em contractDigital, ' +
+      'Marca todos os contratos do ciclo como MARKEDFORCONTRACT em contractDigital, ' +
       'pulando a etapa de formulário de contratação.',
     inputs: [
-      { key: 'noticeId', label: 'ID do Edital (extraído da URL)', type: 'objectId', required: true },
+      { key: 'noticeId', label: 'ID do Ciclo (extraído da URL)', type: 'objectId', required: true },
     ],
     steps: [
       {
@@ -427,7 +427,7 @@ const procedures = [
   {
     projectId: PROJECT_ID,
     nucleo: 'Contratação',
-    name: 'Regerar termo de execução após assinatura do proponente — Liberar geração',
+    name: 'Regerar termo de execução após assinatura do solicitante — Liberar geração',
     description:
       'Define o status do contrato como CONTRACTATTACHED, permitindo que o sistema regere o termo de execução. ' +
       'Após a geração, execute o passo de retorno (SIGNATURESENT).',
@@ -462,10 +462,10 @@ const procedures = [
   {
     projectId: PROJECT_ID,
     nucleo: 'Contratação',
-    name: 'Regerar termo de execução após assinatura do proponente — Retornar para SIGNATURESENT',
+    name: 'Regerar termo de execução após assinatura do solicitante — Retornar para SIGNATURESENT',
     description:
       'Após a geração do novo termo, retorna o status do contrato para SIGNATURESENT ' +
-      'para que a secretaria possa assinar.',
+      'para que a equipe possa assinar.',
     inputs: [
       {
         key: 'submissionId',
@@ -538,7 +538,7 @@ const procedures = [
     nucleo: 'Avaliações',
     name: 'Retornar avaliações para pendentes para substituição de avaliador(a)',
     description:
-      'Retorna todas as avaliações de um avaliador em um edital para NOTSTARTED e limpa as notas, ' +
+      'Retorna todas as avaliações de um avaliador em um ciclo para NOTSTARTED e limpa as notas, ' +
       'permitindo a substituição do avaliador.',
     inputs: [
       {
@@ -549,7 +549,7 @@ const procedures = [
       },
       {
         key: 'noticeId',
-        label: 'ID do Edital',
+        label: 'ID do Ciclo',
         type: 'objectId',
         required: true,
       },
@@ -593,13 +593,13 @@ const procedures = [
   // ── 13 ────────────────────────────────────────────────────────────────────
   {
     projectId: PROJECT_ID,
-    nucleo: 'Editais',
-    name: 'Retornar Edital para Concluir Etapa de Inscrições',
+    nucleo: 'Ciclos',
+    name: 'Retornar Ciclo para Concluir Etapa de Inscrições',
     description:
-      'Retorna o edital para configuration.status = closedForSubscriptions quando avançado ' +
+      'Retorna o ciclo para configuration.status = closedForSubscriptions quando avançado ' +
       'incorretamente para avaliações.',
     inputs: [
-      { key: 'noticeId', label: 'ID do Edital (extraído da URL)', type: 'objectId', required: true },
+      { key: 'noticeId', label: 'ID do Ciclo (extraído da URL)', type: 'objectId', required: true },
     ],
     steps: [
       {
@@ -750,15 +750,15 @@ const procedures = [
   // ── 17 ────────────────────────────────────────────────────────────────────
   {
     projectId: PROJECT_ID,
-    nucleo: 'Pareceristas',
-    name: 'Voltar Parecerista para Pendentes de Credenciamento',
+    nucleo: 'Revisores',
+    name: 'Voltar Revisor para Pendentes de Cadastro',
     description:
-      'Retorna o parecerista para SUBMITTED em reviewers e a avaliação para PENDING em reviewerEvaluations. ' +
+      'Retorna o revisor para SUBMITTED em reviewers e a avaliação para PENDING em reviewerEvaluations. ' +
       'Informe o userId e o _id do documento em reviewers (reviewerDocId).',
     inputs: [
       {
         key: 'userId',
-        label: 'userId do parecerista (reviewers → userId)',
+        label: 'userId do revisor (reviewers → userId)',
         type: 'objectId',
         required: true,
       },
@@ -807,7 +807,7 @@ const procedures = [
     nucleo: 'Avaliações',
     name: 'Zerar notas de projetos de um avaliador',
     description:
-      'Reseta as avaliações de um avaliador em um edital: status NOTSTARTED, ' +
+      'Reseta as avaliações de um avaliador em um ciclo: status NOTSTARTED, ' +
       'zerando médias, soma e campos do formulário. Filtra por noticeEvaluator._id.',
     inputs: [
       {
@@ -818,7 +818,7 @@ const procedures = [
       },
       {
         key: 'noticeId',
-        label: 'ID do Edital',
+        label: 'ID do Ciclo',
         type: 'objectId',
         required: true,
       },

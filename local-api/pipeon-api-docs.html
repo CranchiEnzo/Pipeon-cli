@@ -558,8 +558,8 @@ Scheduler     : verificando procedimentos a cada minuto</pre>
 {
   <span class="tok-prop">"document"</span>: {
     <span class="tok-prop">"_id"</span>: <span class="tok-str">"role_permissions"</span>,
-    <span class="tok-prop">"operator"</span>: [<span class="tok-str">"procedure"</span>, <span class="tok-str">"history"</span>, <span class="tok-str">"restore"</span>, <span class="tok-str">"editais"</span>, <span class="tok-str">"editais:edit"</span>],
-    <span class="tok-prop">"user"</span>:     [<span class="tok-str">"procedure"</span>, <span class="tok-str">"history"</span>, <span class="tok-str">"restore"</span>, <span class="tok-str">"editais"</span>]
+    <span class="tok-prop">"operator"</span>: [<span class="tok-str">"procedure"</span>, <span class="tok-str">"history"</span>, <span class="tok-str">"restore"</span>, <span class="tok-str">"ciclos"</span>, <span class="tok-str">"ciclos:edit"</span>],
+    <span class="tok-prop">"user"</span>:     [<span class="tok-str">"procedure"</span>, <span class="tok-str">"history"</span>, <span class="tok-str">"restore"</span>, <span class="tok-str">"ciclos"</span>]
   }
 }</pre>
     </div>
@@ -614,7 +614,7 @@ Scheduler     : verificando procedimentos a cada minuto</pre>
       <table class="tbl">
         <thead><tr><th>Campo</th><th>Tipo</th><th>Obrigatorio</th><th>Descricao</th></tr></thead>
         <tbody>
-          <tr><td>noticeId</td><td>string</td><td><span class="badge badge--danger">Sim</span></td><td>ObjectId do edital (hex 24 chars)</td></tr>
+          <tr><td>noticeId</td><td>string</td><td><span class="badge badge--danger">Sim</span></td><td>ObjectId do ciclo (hex 24 chars)</td></tr>
           <tr><td>evaluatorUserId</td><td>string</td><td><span class="badge badge--danger">Sim</span></td><td>ObjectId do avaliador (hex 24 chars)</td></tr>
           <tr><td>ticket</td><td>string</td><td><span class="badge">Nao</span></td><td>Numero do chamado</td></tr>
           <tr><td>evaluatorName</td><td>string</td><td><span class="badge">Nao</span></td><td>Nome do avaliador</td></tr>
@@ -705,7 +705,7 @@ db.pipeon_auto_backups.<span class="tok-fn">find</span>({
 
       <p>Filtros suportam <code>{"$oid":"..."}</code> para ObjectId e <code>{"$date":"..."}</code> para datas — o servidor resolve automaticamente via <code>resolveExtendedJson</code>.</p>
 
-      <pre><span class="tok-comment">// Buscar avaliacoes de um edital</span>
+      <pre><span class="tok-comment">// Buscar avaliacoes de um ciclo</span>
 <span class="tok-key">POST</span> /api/mongodb/find
 {
   <span class="tok-prop">"database"</span>: <span class="tok-str">"target-database"</span>,

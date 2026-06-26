@@ -250,15 +250,15 @@ details p, details ul { margin-top: var(--space-3); font-size: var(--fs-base); }
     <h3>Estrutura do relatorio gerado</h3>
     <pre><code><span class="tok-comment">## Relatorio de BUG — [titulo-do-chamado]</span>
 
-<span class="tok-prop">Arquivo afetado:</span>    <span class="tok-str">src/routes/editais.tsx</span>
+<span class="tok-prop">Arquivo afetado:</span>    <span class="tok-str">src/routes/ciclos.tsx</span>
 <span class="tok-prop">Linha aproximada:</span>   <span class="tok-str">142</span>
-<span class="tok-prop">Funcao/componente:</span>  <span class="tok-fn">EditaisPage</span>
+<span class="tok-prop">Funcao/componente:</span>  <span class="tok-fn">CiclosPage</span>
 
 <span class="tok-comment">### Stack de chamadas</span>
-<span class="tok-str">EditaisPage</span> → <span class="tok-fn">atlasCall</span>(<span class="tok-str">"aggregate"</span>, <span class="tok-str">"editais"</span>, ...) → <span class="tok-str">POST /api/mongodb/aggregate</span>
+<span class="tok-str">CiclosPage</span> → <span class="tok-fn">atlasCall</span>(<span class="tok-str">"aggregate"</span>, <span class="tok-str">"ciclos"</span>, ...) → <span class="tok-str">POST /api/mongodb/aggregate</span>
 
 <span class="tok-comment">### Reproducao local</span>
-<span class="tok-key">1.</span> Acesse /editais com cargo <span class="tok-str">"operator"</span> e permissao <span class="tok-str">"editais"</span> ativa
+<span class="tok-key">1.</span> Acesse /ciclos com cargo <span class="tok-str">"operator"</span> e permissao <span class="tok-str">"ciclos"</span> ativa
 <span class="tok-key">2.</span> Clique em "Exportar relatorio" com periodo anterior a 01/01/2024
 <span class="tok-key">3.</span> Observe o erro 500 retornado pela API
 
@@ -314,13 +314,13 @@ details p, details ul { margin-top: var(--space-3); font-size: var(--fs-base); }
 <span class="tok-prop">Filtro sugerido:</span>
 {
   <span class="tok-prop">candidatoId</span>: <span class="tok-str">"&lt;ID_DO_CANDIDATO&gt;"</span>,
-  <span class="tok-prop">editalId</span>:    <span class="tok-str">"&lt;ID_DO_EDITAL&gt;"</span>,
+  <span class="tok-prop">cicloId</span>:    <span class="tok-str">"&lt;ID_DO_CICLO&gt;"</span>,
   <span class="tok-prop">createdAt</span>:   { <span class="tok-prop">$gt</span>: <span class="tok-str">"&lt;DATA_DO_INCIDENTE&gt;"</span> }
 }
 
 <span class="tok-prop">Criterio de aplicacao:</span>
 <span class="tok-str">"Usar somente quando confirmado via find() que existem N &gt; 1
- documentos com o mesmo candidatoId + editalId para o mesmo periodo."</span>
+ documentos com o mesmo candidatoId + cicloId para o mesmo periodo."</span>
 
 <span class="tok-comment">## Proximos passos para publicacao</span>
 <span class="tok-key">1.</span> Revisao tecnica pelo desenvolvedor responsavel
@@ -347,7 +347,7 @@ details p, details ul { margin-top: var(--space-3); font-size: var(--fs-base); }
       </li>
       <li>
         <strong>Mapeamento do fluxo de navegacao</strong>
-        <span>Com base no relato, o sistema identifica qual rota o usuario estava tentando acessar ou qual acao estava tentando executar. Considera as rotas do CLI (<code>/editais</code>, <code>/procedure</code>, <code>/restore</code>, etc.) e os requisitos de permissao de cada uma.</span>
+        <span>Com base no relato, o sistema identifica qual rota o usuario estava tentando acessar ou qual acao estava tentando executar. Considera as rotas do CLI (<code>/ciclos</code>, <code>/procedure</code>, <code>/restore</code>, etc.) e os requisitos de permissao de cada uma.</span>
       </li>
       <li>
         <strong>Identificacao do ponto de dificuldade</strong>
@@ -366,20 +366,20 @@ details p, details ul { margin-top: var(--space-3); font-size: var(--fs-base); }
     <h3>Estrutura do relatorio gerado</h3>
     <pre><code><span class="tok-comment">## Orientacao ao Usuario — [titulo-do-chamado]</span>
 
-<span class="tok-prop">Rota envolvida:</span>       <span class="tok-str">/editais</span>
-<span class="tok-prop">Permissao necessaria:</span>  <span class="tok-fn">usePermission</span>(<span class="tok-str">"editais:edit"</span>) → <span class="tok-key">true</span>
-<span class="tok-prop">Cargo minimo:</span>         <span class="tok-str">operator</span> com permissao editais:edit ativa (ou admin)
+<span class="tok-prop">Rota envolvida:</span>       <span class="tok-str">/ciclos</span>
+<span class="tok-prop">Permissao necessaria:</span>  <span class="tok-fn">usePermission</span>(<span class="tok-str">"ciclos:edit"</span>) → <span class="tok-key">true</span>
+<span class="tok-prop">Cargo minimo:</span>         <span class="tok-str">operator</span> com permissao ciclos:edit ativa (ou admin)
 
 <span class="tok-comment">### Instrucao para o operador (testar em homologacao)</span>
 <span class="tok-key">1.</span> Acesse /admin → Permissoes e confirme que o cargo do usuario
-   tem "editais:edit" habilitado
+   tem "ciclos:edit" habilitado
 <span class="tok-key">2.</span> Faca login com uma conta de teste com esse cargo em homologacao
-<span class="tok-key">3.</span> Navegue ate /editais — o botao "Editar" deve aparecer no canto superior direito
+<span class="tok-key">3.</span> Navegue ate /ciclos — o botao "Editar" deve aparecer no canto superior direito
 <span class="tok-key">4.</span> Confirme que o botao esta visivelmente ativo (nao desabilitado)
 <span class="tok-key">5.</span> Clique em Editar, altere um campo e salve — confirme o toast de sucesso
 
 <span class="tok-comment">### Script de resposta ao usuario final</span>
-<span class="tok-str">"Para editar um edital, seu perfil precisa ter a permissao de edicao
+<span class="tok-str">"Para editar um ciclo, seu perfil precisa ter a permissao de edicao
  habilitada pelo administrador do sistema. Caso voce nao visualize o
  botao 'Editar', entre em contato com o administrador para que ele
  verifique as permissoes do seu cargo em Configuracoes > Permissoes."</span></code></pre>

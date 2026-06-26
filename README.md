@@ -123,7 +123,7 @@ npm start                # Express proxy on http://localhost:5000
 ### Seeding (optional)
 
 `local-api/` ships seed scripts (`seed-procedures.js`, `seed-evaluations.js`,
-`seed-icms-procedures.js`) to populate the procedure catalog and sample evaluation data.
+`seed-secondary-procedures.js`) to populate the procedure catalog and sample evaluation data.
 
 ## Available Scripts
 

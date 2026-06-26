@@ -173,7 +173,7 @@ function ResetEvaluationsPage() {
   async function handleSearchEvaluators() {
     setError(null);
     if (!ticket.trim() || !noticeId.trim()) {
-      setError("Preencha o número do chamado e o ObjectId do edital.");
+      setError("Preencha o número do chamado e o ObjectId do ciclo.");
       return;
     }
     setLoading(true);
@@ -194,7 +194,7 @@ function ResetEvaluationsPage() {
 
       if (ids.length === 0) {
         setEvaluators([]);
-        setError("Nenhum avaliador encontrado para este edital.");
+        setError("Nenhum avaliador encontrado para este ciclo.");
         return;
       }
 
@@ -447,7 +447,7 @@ function ResetEvaluationsPage() {
     return (
       <Shell>
         <DbBadge />
-        <BackLink to="/procedure" search={{ nucleo: "Editais" }} />
+        <BackLink to="/procedure" search={{ nucleo: "Ciclos" }} />
         <BrandHeader subtitle={false} />
         <div className="rounded-lg border border-destructive/50 bg-destructive/10 px-4 py-3 text-sm text-destructive">
           <strong>Banco não permitido:</strong> procedimentos só podem ser executados contra o banco{" "}
@@ -461,7 +461,7 @@ function ResetEvaluationsPage() {
   return (
     <Shell>
       <DbBadge />
-      <BackLink to="/procedure" search={{ nucleo: "Editais" }} />
+      <BackLink to="/procedure" search={{ nucleo: "Ciclos" }} />
       <BrandHeader subtitle={false} />
 
       {readOnly && <ReadOnlyBanner />}
@@ -472,7 +472,7 @@ function ResetEvaluationsPage() {
         <Card>
           <h2 className="mb-1 text-lg font-semibold">Identificação</h2>
           <p className="mb-5 text-sm text-muted-foreground">
-            Informe o chamado e o ObjectId do edital para localizar os avaliadores.
+            Informe o chamado e o ObjectId do ciclo para localizar os avaliadores.
           </p>
           <div className="space-y-4">
             <Field label="Número do chamado">
@@ -484,7 +484,7 @@ function ResetEvaluationsPage() {
                 placeholder="Ex.: 123456"
               />
             </Field>
-            <Field label="ObjectId do edital (notice)">
+            <Field label="ObjectId do ciclo (notice)">
               <input
                 value={noticeId}
                 onChange={(e) => setNoticeId(e.target.value)}
@@ -549,7 +549,7 @@ function ResetEvaluationsPage() {
                 <div className="space-y-2.5">
                   <p className="text-muted-foreground">
                     <strong className="text-primary">{evalCount}</strong> avaliação(ões) deste
-                    avaliador neste edital.
+                    avaliador neste ciclo.
                   </p>
                   {evalStatusCounts && Object.keys(evalStatusCounts).length > 0 && (
                     <div>
@@ -599,7 +599,7 @@ function ResetEvaluationsPage() {
 
           <dl className="space-y-3 rounded-md border border-border bg-muted/30 p-4 text-sm">
             <Row label="Chamado" value={ticket} />
-            <Row label="Edital" value={noticeId} mono />
+            <Row label="Ciclo" value={noticeId} mono />
             <Row
               label="Avaliador"
               value={`${[selectedEvaluator.firstName, selectedEvaluator.lastName].filter(Boolean).join(" ")} (${selectedEvaluator.email || selectedEvaluator.userId})`}

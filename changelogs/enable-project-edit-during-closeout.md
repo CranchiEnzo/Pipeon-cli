@@ -1,6 +1,6 @@
-# Disponibilizar Alteração de Projeto quando prestação de contas estiver iniciada
+# Disponibilizar Alteração de Projeto quando fechamento estiver iniciada
 
-**Núcleo:** Prestação de Contas
+**Núcleo:** Fechamento
 **Collection afetada:** `accountabilityReports`
 
 ## Campos alterados
@@ -13,7 +13,7 @@
 
 | Campo | Tipo | Obrigatório | Observação |
 |-------|------|------------|-----------|
-| ID do documento em accountabilityReports | ObjectId | Sim | `_id` do registro de prestação de contas |
+| ID do documento em accountabilityReports | ObjectId | Sim | `_id` do registro de fechamento |
 
 ## Fluxo de execução
 
@@ -23,4 +23,4 @@
 
 ## Observações
 
-- Após o ajuste, o campo de alteração de projetos fica disponível para o proponente
+- Após o ajuste, o campo de alteração de projetos fica disponível para o solicitante
