@@ -1,0 +1,589 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+<title>Plugin de Analise Automatizada — Claude Code</title>
+<style>
+:root {
+  --c-bg: #f7f9fb;
+  --c-surface: #ffffff;
+  --c-surface-2: #f1f4f7;
+  --c-surface-3: #e5eaf0;
+  --c-border: #dde2e8;
+  --c-text: #1f2328;
+  --c-text-soft: #4a5560;
+  --c-text-muted: #6b7280;
+  --c-accent: #066aab;
+  --c-accent-strong: #054a78;
+  --c-accent-soft: #e8f3fb;
+  --c-accent-bright: #4facfe;
+  --c-ok: #1f7a3a;
+  --c-ok-soft: #ecfdf3;
+  --c-warn: #b45309;
+  --c-warn-soft: #fffaeb;
+  --c-err: #b91c1c;
+  --c-err-soft: #fef2f2;
+  --c-code-bg: #1e293b;
+  --c-code-text: #e2e8f0;
+  --c-code-keyword: #f97583;
+  --c-code-fn: #c4b5fd;
+  --c-code-string: #93c5fd;
+  --c-code-prop: #7dd3fc;
+  --c-code-comment: #94a3b8;
+  --ff-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", "Segoe UI", system-ui, sans-serif;
+  --ff-mono: "SF Mono", "Monaco", "Menlo", "Consolas", monospace;
+  --fs-xs: 12px; --fs-sm: 13px; --fs-base: 15px; --fs-md: 16px; --fs-lg: 17px;
+  --fs-xl: 20px; --fs-2xl: 24px; --fs-3xl: 28px; --fs-4xl: 32px;
+  --lh-tight: 1.15; --lh-snug: 1.4; --lh-normal: 1.65;
+  --fw-normal: 400; --fw-medium: 500; --fw-semibold: 600; --fw-bold: 700;
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-5: 20px;
+  --space-6: 24px; --space-7: 32px; --space-8: 40px; --space-9: 56px; --space-10: 72px;
+  --radius-sm: 4px; --radius-md: 6px; --radius-lg: 10px; --radius-xl: 14px; --radius-full: 999px;
+  --shadow-sm: 0 1px 2px rgba(15,23,42,.04);
+  --shadow-md: 0 1px 3px rgba(15,23,42,.05), 0 2px 8px rgba(15,23,42,.04);
+  --shadow-lg: 0 4px 12px rgba(15,23,42,.08), 0 12px 24px rgba(15,23,42,.06);
+  --content-max: 880px;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; font-family: var(--ff-sans); font-size: var(--fs-md); line-height: var(--lh-normal); color: var(--c-text); background: var(--c-bg); -webkit-font-smoothing: antialiased; }
+.page-wrap { max-width: var(--content-max); margin: 0 auto; padding: var(--space-7) var(--space-6) var(--space-10); }
+.hero { background: linear-gradient(135deg, var(--c-accent-strong) 0%, var(--c-accent) 60%, var(--c-accent-bright) 100%); color: #fff; border-radius: var(--radius-xl); padding: var(--space-8) var(--space-7); margin-bottom: var(--space-8); box-shadow: var(--shadow-md); }
+.hero__eyebrow { display: inline-flex; align-items: center; gap: var(--space-1); background: rgba(255,255,255,.18); color: #fff; padding: var(--space-1) var(--space-3); border-radius: var(--radius-full); font-size: 11px; font-weight: var(--fw-semibold); text-transform: uppercase; letter-spacing: .6px; margin-bottom: var(--space-4); backdrop-filter: blur(6px); }
+.hero__title { font-size: var(--fs-4xl); font-weight: var(--fw-bold); letter-spacing: -.02em; margin: 0 0 var(--space-3); line-height: var(--lh-tight); color: #fff; }
+.hero__subtitle { font-size: var(--fs-lg); margin: 0 0 var(--space-6); max-width: 640px; color: #fff; opacity: .95; }
+.hero__meta { display: flex; flex-wrap: wrap; gap: var(--space-4) var(--space-7); font-size: var(--fs-sm); color: #fff; opacity: .95; }
+.hero, .hero p, .hero li, .hero a, .hero span { color: #fff; }
+.hero a { text-decoration: underline; }
+.hero__meta-item strong { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: .5px; opacity: .75; margin-bottom: 2px; font-weight: var(--fw-semibold); color: #fff; }
+.toc { background: var(--c-surface); border: 1px solid var(--c-border); border-radius: var(--radius-lg); padding: var(--space-4) var(--space-5); margin-bottom: var(--space-8); }
+.toc__title { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: .6px; color: var(--c-text-muted); margin-bottom: var(--space-2); font-weight: var(--fw-semibold); }
+.toc__list { margin: 0; padding-left: var(--space-5); columns: 2; column-gap: var(--space-7); }
+.toc__list li { margin-bottom: var(--space-1); break-inside: avoid; }
+.toc__list a { color: var(--c-text-soft); text-decoration: none; font-size: var(--fs-base); }
+.toc__list a:hover { color: var(--c-accent); text-decoration: underline; }
+.section { margin-bottom: var(--space-9); }
+.section h2 { font-size: var(--fs-2xl); font-weight: var(--fw-bold); letter-spacing: -.01em; margin: 0 0 var(--space-2); display: flex; align-items: baseline; gap: var(--space-3); }
+.section h2 .num { color: var(--c-accent); font-size: var(--fs-sm); font-weight: var(--fw-semibold); font-feature-settings: "tnum"; }
+.section h3 { font-size: var(--fs-md); font-weight: var(--fw-semibold); margin: var(--space-6) 0 var(--space-3); }
+.section .lead { color: var(--c-text-muted); margin: 0 0 var(--space-6); font-size: var(--fs-base); }
+p { margin: 0 0 var(--space-3); color: var(--c-text-soft); }
+ul, ol { margin: 0 0 var(--space-3); padding-left: var(--space-5); color: var(--c-text-soft); }
+li { margin-bottom: var(--space-1); }
+strong { color: var(--c-text); }
+em { font-style: italic; color: var(--c-text-soft); }
+a { color: var(--c-accent); }
+a:hover { text-decoration: underline; }
+.callout { border-left: 3px solid var(--c-accent); background: var(--c-accent-soft); padding: var(--space-3) var(--space-5); border-radius: 0 var(--radius-md) var(--radius-md) 0; margin: var(--space-4) 0; font-size: var(--fs-base); }
+.callout strong { display: block; margin-bottom: var(--space-1); font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: .5px; }
+.callout--ok { border-left-color: var(--c-ok); background: var(--c-ok-soft); }
+.callout--warn { border-left-color: var(--c-warn); background: var(--c-warn-soft); }
+.callout--danger { border-left-color: var(--c-err); background: var(--c-err-soft); }
+pre { background: var(--c-code-bg); color: var(--c-code-text); border-radius: var(--radius-md); padding: var(--space-4) var(--space-5); font-family: var(--ff-mono); font-size: var(--fs-sm); line-height: 1.55; overflow-x: auto; margin: var(--space-4) 0; box-shadow: var(--shadow-md); }
+code { font-family: var(--ff-mono); font-size: .88em; background: var(--c-surface-2); color: var(--c-accent); padding: 1px var(--space-2); border-radius: var(--radius-sm); }
+pre code { background: transparent; color: inherit; padding: 0; }
+.tok-key { color: var(--c-code-keyword); }
+.tok-fn { color: var(--c-code-fn); }
+.tok-str { color: var(--c-code-string); }
+.tok-prop { color: var(--c-code-prop); }
+.tok-comment { color: var(--c-code-comment); font-style: italic; }
+.steps { counter-reset: step; list-style: none; padding: 0; }
+.steps li { position: relative; padding: var(--space-3) var(--space-4) var(--space-3) 56px; background: var(--c-surface); border: 1px solid var(--c-border); border-radius: var(--radius-md); margin-bottom: var(--space-2); counter-increment: step; }
+.steps li::before { content: counter(step); position: absolute; left: var(--space-4); top: 50%; transform: translateY(-50%); width: 28px; height: 28px; background: var(--c-accent); color: #fff; border-radius: var(--radius-full); display: flex; align-items: center; justify-content: center; font-weight: var(--fw-bold); font-size: var(--fs-sm); }
+.steps li strong { display: block; margin-bottom: 2px; }
+.steps li span { font-size: var(--fs-sm); color: var(--c-text-muted); }
+.badge { display: inline-flex; align-items: center; gap: var(--space-1); padding: 2px var(--space-2); border-radius: var(--radius-full); font-size: 11px; font-weight: var(--fw-semibold); letter-spacing: .3px; text-transform: uppercase; background: var(--c-surface-2); color: var(--c-text-soft); }
+.badge--ok { background: var(--c-ok-soft); color: var(--c-ok); }
+.badge--warn { background: var(--c-warn-soft); color: var(--c-warn); }
+.badge--danger { background: var(--c-err-soft); color: var(--c-err); }
+.badge--accent { background: var(--c-accent-soft); color: var(--c-accent); }
+.tbl { width: 100%; border-collapse: collapse; font-size: var(--fs-base); background: var(--c-surface); border: 1px solid var(--c-border); border-radius: var(--radius-md); overflow: hidden; margin: var(--space-4) 0; }
+.tbl th, .tbl td { padding: var(--space-2) var(--space-4); text-align: left; border-bottom: 1px solid var(--c-border); }
+.tbl th { background: var(--c-surface-2); font-size: var(--fs-sm); font-weight: var(--fw-semibold); color: var(--c-text-soft); text-transform: uppercase; letter-spacing: .3px; }
+.tbl tr:last-child td { border-bottom: 0; }
+.tbl td { color: var(--c-text-soft); }
+details { background: var(--c-surface); border: 1px solid var(--c-border); border-radius: var(--radius-md); padding: var(--space-3) var(--space-5); margin-bottom: var(--space-2); }
+details[open] { background: var(--c-surface-2); }
+details summary { cursor: pointer; font-weight: var(--fw-semibold); font-size: var(--fs-base); color: var(--c-text); }
+details summary::-webkit-details-marker { color: var(--c-accent); }
+details p, details ul { margin-top: var(--space-3); font-size: var(--fs-base); }
+.footer { margin-top: var(--space-10); padding-top: var(--space-6); border-top: 1px solid var(--c-border); font-size: var(--fs-sm); color: var(--c-text-muted); text-align: center; }
+.footer p { margin: var(--space-1) 0; color: var(--c-text-muted); }
+@media print {
+  body { background: #fff; color: #000; }
+  .hero { background: #fff; color: #000; border: 1px solid #ccc; }
+  .hero__title, .hero__meta-item strong { color: #000; }
+  pre { box-shadow: none; }
+  a { color: #000; text-decoration: underline; }
+}
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <!-- Hero -->
+  <header class="hero">
+    <span class="hero__eyebrow">[COMPANY] · Claude Code · Ideia de Implementacao</span>
+    <h1 class="hero__title">Plugin de Analise Automatizada</h1>
+    <p class="hero__subtitle">Automacao do processo de triagem e analise de chamados do [INTERNAL-SYSTEM] — o Claude Code le o monorepo, classifica a requisicao e entrega um relatorio tecnico pronto para acao.</p>
+    <div class="hero__meta">
+      <div class="hero__meta-item"><strong>Projeto base</strong>CLI (cli-connect-ease)</div>
+      <div class="hero__meta-item"><strong>Gatilho</strong>/analisar-chamado</div>
+      <div class="hero__meta-item"><strong>Monorepo alvo</strong>[INTERNAL-SYSTEM]</div>
+      <div class="hero__meta-item"><strong>Data</strong>11/06/2026</div>
+    </div>
+  </header>
+
+  <!-- TOC -->
+  <nav class="toc">
+    <span class="toc__title">Sumario</span>
+    <ol class="toc__list">
+      <li><a href="#s1">Visao geral</a></li>
+      <li><a href="#s2">Classificacao da requisicao</a></li>
+      <li><a href="#s3">Fluxo: BUG</a></li>
+      <li><a href="#s4">Fluxo: Ajuste em Base</a></li>
+      <li><a href="#s5">Fluxo: Orientacao ao Usuario</a></li>
+      <li><a href="#s6">Arquitetura do plugin</a></li>
+      <li><a href="#s7">Roadmap de implementacao</a></li>
+    </ol>
+  </nav>
+
+  <!-- 01 Visao geral -->
+  <section class="section" id="s1">
+    <h2><span class="num">01</span> Visao geral</h2>
+    <p class="lead">O plugin integra o Claude Code ao fluxo de suporte interno [COMPANY], automatizando a triagem e a analise tecnica de chamados abertos pelo usuario final no [INTERNAL-SYSTEM].</p>
+
+    <p>Hoje, quando um operador recebe um chamado, ele precisa manualmente interpretar o relato, reproduzir o erro, consultar o codigo e montar uma resposta. Esse fluxo e lento e depende do conhecimento individual de cada operador sobre o sistema.</p>
+
+    <p>Com o plugin, o operador cola o texto do chamado e os prints de evidencia diretamente no Claude Code. O sistema le o monorepo [INTERNAL-SYSTEM], classifica automaticamente o tipo de problema e entrega um relatorio estruturado com a analise tecnica, o caminho para simular o erro (quando aplicavel) e a sugestao de acao — seja uma correcao de codigo, um ajuste direto no banco via CLI, ou uma instrucao didatica para repassar ao usuario final.</p>
+
+    <div class="callout callout--ok">
+      <strong>Principio central</strong>
+      O Claude Code atua como um analista de primeiro nivel: ele le o contexto do sistema (via CLAUDE.md), vasculha o monorepo e entrega um diagnostico — cabendo ao operador validar e executar a acao recomendada.
+    </div>
+
+    <h3>O que o plugin nao faz</h3>
+    <ul>
+      <li>Nao aplica correcoes de codigo automaticamente em producao.</li>
+      <li>Nao executa procedimentos no banco sem confirmacao humana.</li>
+      <li>Nao responde diretamente ao usuario final — o operador sempre e o intermediario.</li>
+    </ul>
+  </section>
+
+  <!-- 02 Classificacao -->
+  <section class="section" id="s2">
+    <h2><span class="num">02</span> Classificacao da requisicao</h2>
+    <p class="lead">O sistema recebe os inputs do chamado e determina automaticamente em qual das tres categorias o problema se enquadra antes de executar qualquer analise.</p>
+
+    <h3>Inputs aceitos</h3>
+    <ul>
+      <li><strong>Texto do chamado</strong> (obrigatorio) — descricao do problema conforme aberta pelo usuario final.</li>
+      <li><strong>Prints / evidencias</strong> (opcional) — capturas de tela do erro, mensagens exibidas na interface, logs do console do navegador.</li>
+    </ul>
+
+    <div class="callout callout--warn">
+      <strong>Qualidade do input</strong>
+      Quanto mais detalhado o texto do chamado e mais claros os prints, mais precisa sera a classificacao. Chamados vagos como "nao funciona" podem gerar classificacoes ambiguas — nesse caso o plugin solicita informacoes adicionais ao operador antes de prosseguir.
+    </div>
+
+    <h3>Categorias de classificacao</h3>
+    <table class="tbl">
+      <thead>
+        <tr>
+          <th>Tipo</th>
+          <th>Gatilho tipico</th>
+          <th>Acao do sistema</th>
+          <th>Output esperado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="badge badge--danger">BUG</span></td>
+          <td>Erro de tela, excecao no console, comportamento inesperado do sistema apos uma acao do usuario</td>
+          <td>Le o monorepo, localiza o trecho de codigo responsavel, mapeia o caminho de reproducao</td>
+          <td>Relatorio tecnico com arquivo, linha, stack e sugestao de fix</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge--warn">Ajuste em Base</span></td>
+          <td>Dado incorreto no sistema, registro duplicado, campo com valor errado que precisa ser corrigido diretamente no MongoDB</td>
+          <td>Identifica a colecao envolvida, verifica se existe procedimento no CLI, indica ou cria o procedimento adequado</td>
+          <td>Nome do procedimento existente OU draft de novo procedimento pronto para revisao</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge--accent">Orientacao ao Usuario</span></td>
+          <td>Duvida de uso, dificuldade de navegacao, recurso que o usuario nao sabe como acessar ou opera de forma incorreta</td>
+          <td>Le a documentacao do monorepo, mapeia o fluxo de navegacao, identifica a rota e permissao envolvidas</td>
+          <td>Instrucao didatica numerada para o operador testar em homologacao e repassar ao usuario</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>Nos casos em que o chamado apresenta caracteristicas de mais de uma categoria — por exemplo, um dado errado que tambem causa um erro de tela — o plugin identifica a classificacao primaria (a que bloqueia o usuario) e menciona a secundaria no relatorio como ponto de atencao adicional.</p>
+  </section>
+
+  <!-- 03 Fluxo BUG -->
+  <section class="section" id="s3">
+    <h2><span class="num">03</span> Fluxo: BUG</h2>
+    <p class="lead">Acionado quando o sistema identifica um problema tecnico no codigo — erro de execucao, comportamento incorreto ou falha de integracao entre frontend e API.</p>
+
+    <h3>Passo a passo</h3>
+    <ol class="steps">
+      <li>
+        <strong>Leitura do monorepo [INTERNAL-SYSTEM]</strong>
+        <span>O Claude Code usa as ferramentas Grep, Read e Glob para vasculhar o repositorio. O CLAUDE.md do [INTERNAL-SYSTEM] e lido primeiro para entender a estrutura do projeto antes de qualquer busca.</span>
+      </li>
+      <li>
+        <strong>Localizacao do trecho responsavel</strong>
+        <span>Com base no relato e nos prints, o sistema identifica os arquivos e funcoes envolvidos. No contexto do CLI, busca preferencialmente em <code>src/routes/</code>, <code>src/lib/atlas.ts</code> e <code>src/lib/permissions.ts</code>.</span>
+      </li>
+      <li>
+        <strong>Mapeamento do caminho de reproducao</strong>
+        <span>O sistema descreve, passo a passo, como um desenvolvedor pode reproduzir o erro localmente — incluindo pre-requisitos de dados no banco, rota a acessar, cargo necessario e acao exata a executar.</span>
+      </li>
+      <li>
+        <strong>Geracao da sugestao de correcao</strong>
+        <span>Com o contexto do erro localizado, o Claude Code elabora uma sugestao de fix: o arquivo a editar, a mudanca sugerida com trecho de codigo e o raciocinio tecnico por tras da correcao.</span>
+      </li>
+    </ol>
+
+    <h3>Estrutura do relatorio gerado</h3>
+    <pre><code><span class="tok-comment">## Relatorio de BUG — [titulo-do-chamado]</span>
+
+<span class="tok-prop">Arquivo afetado:</span>    <span class="tok-str">src/routes/editais.tsx</span>
+<span class="tok-prop">Linha aproximada:</span>   <span class="tok-str">142</span>
+<span class="tok-prop">Funcao/componente:</span>  <span class="tok-fn">EditaisPage</span>
+
+<span class="tok-comment">### Stack de chamadas</span>
+<span class="tok-str">EditaisPage</span> → <span class="tok-fn">atlasCall</span>(<span class="tok-str">"aggregate"</span>, <span class="tok-str">"editais"</span>, ...) → <span class="tok-str">POST /api/mongodb/aggregate</span>
+
+<span class="tok-comment">### Reproducao local</span>
+<span class="tok-key">1.</span> Acesse /editais com cargo <span class="tok-str">"operator"</span> e permissao <span class="tok-str">"editais"</span> ativa
+<span class="tok-key">2.</span> Clique em "Exportar relatorio" com periodo anterior a 01/01/2024
+<span class="tok-key">3.</span> Observe o erro 500 retornado pela API
+
+<span class="tok-comment">### Sugestao de correcao</span>
+<span class="tok-comment">// Antes</span>
+<span class="tok-key">const</span> <span class="tok-prop">pipeline</span> = [{ <span class="tok-prop">$match</span>: { <span class="tok-prop">data</span>: { <span class="tok-prop">$gte</span>: dateFrom } } }]
+
+<span class="tok-comment">// Depois — garantir que dateFrom seja um objeto Date, nao uma string</span>
+<span class="tok-key">const</span> <span class="tok-prop">pipeline</span> = [{ <span class="tok-prop">$match</span>: { <span class="tok-prop">data</span>: { <span class="tok-prop">$gte</span>: <span class="tok-key">new</span> <span class="tok-fn">Date</span>(dateFrom) } } }]</code></pre>
+
+    <div class="callout callout--warn">
+      <strong>Validacao obrigatoria</strong>
+      A sugestao de correcao e um ponto de partida tecnico, nao uma solucao definitiva. O desenvolvedor responsavel deve revisar o contexto completo, testar em homologacao e avaliar impactos colaterais antes de aplicar em producao.
+    </div>
+  </section>
+
+  <!-- 04 Fluxo Ajuste em Base -->
+  <section class="section" id="s4">
+    <h2><span class="num">04</span> Fluxo: Ajuste em Base</h2>
+    <p class="lead">Acionado quando o problema nao esta no codigo, mas em dados incorretos no MongoDB — registros com valores errados, duplicidades, campos ausentes ou estados inconsistentes que precisam ser corrigidos diretamente no banco.</p>
+
+    <h3>Passo a passo</h3>
+    <ol class="steps">
+      <li>
+        <strong>Identificacao da colecao envolvida</strong>
+        <span>O sistema analisa o relato para determinar qual colecao MongoDB esta impactada. Considera as colecoes conhecidas do [INTERNAL-SYSTEM] mapeadas no CLAUDE.md e as operacoes disponiveis via <code>atlasCall()</code> em <code>src/lib/atlas.ts</code>.</span>
+      </li>
+      <li>
+        <strong>Verificacao de procedimento existente no CLI</strong>
+        <span>O sistema consulta a lista de procedimentos cadastrados na rota <code>/procedure</code> do CLI para verificar se ja existe um processo adequado para o tipo de correcao identificada.</span>
+      </li>
+      <li>
+        <strong>Cenario A — Procedimento existente</strong>
+        <span>O sistema indica qual procedimento usar, descreve como acessa-lo na interface do CLI e orienta o operador sobre os parametros necessarios para executar a correcao com seguranca.</span>
+      </li>
+      <li>
+        <strong>Cenario B — Procedimento inexistente</strong>
+        <span>O sistema gera um draft de novo procedimento com todos os campos necessarios para que a equipe de produto/desenvolvimento possa revisar, testar e publicar como um novo processo reutilizavel no CLI.</span>
+      </li>
+    </ol>
+
+    <h3>Draft de novo procedimento (Cenario B)</h3>
+    <pre><code><span class="tok-comment">## Draft de Novo Procedimento — [nome-sugerido]</span>
+
+<span class="tok-prop">Nome:</span>         <span class="tok-str">"Correcao de status de inscricao duplicada"</span>
+<span class="tok-prop">Descricao:</span>    <span class="tok-str">"Remove registros duplicados na colecao inscricoes gerados
+               por falha de idempotencia no endpoint de submissao."</span>
+
+<span class="tok-prop">Colecao alvo:</span>  <span class="tok-str">inscricoes</span>
+<span class="tok-prop">Banco:</span>         <span class="tok-str">target-db</span>  <span class="tok-comment">// sempre via override database: "target-db"</span>
+<span class="tok-prop">Operacao:</span>      <span class="tok-str">deleteMany</span>  <span class="tok-comment">// via atlasCall()</span>
+
+<span class="tok-prop">Filtro sugerido:</span>
+{
+  <span class="tok-prop">candidatoId</span>: <span class="tok-str">"&lt;ID_DO_CANDIDATO&gt;"</span>,
+  <span class="tok-prop">editalId</span>:    <span class="tok-str">"&lt;ID_DO_EDITAL&gt;"</span>,
+  <span class="tok-prop">createdAt</span>:   { <span class="tok-prop">$gt</span>: <span class="tok-str">"&lt;DATA_DO_INCIDENTE&gt;"</span> }
+}
+
+<span class="tok-prop">Criterio de aplicacao:</span>
+<span class="tok-str">"Usar somente quando confirmado via find() que existem N &gt; 1
+ documentos com o mesmo candidatoId + editalId para o mesmo periodo."</span>
+
+<span class="tok-comment">## Proximos passos para publicacao</span>
+<span class="tok-key">1.</span> Revisao tecnica pelo desenvolvedor responsavel
+<span class="tok-key">2.</span> Teste em ambiente de homologacao com dados reais anonimizados
+<span class="tok-key">3.</span> Aprovacao pelo gestor de produto
+<span class="tok-key">4.</span> Cadastro no CLI via /admin → Procedimentos</code></pre>
+
+    <div class="callout callout--danger">
+      <strong>Operacoes destrutivas exigem aprovacao</strong>
+      Qualquer procedimento que envolva <code>deleteMany</code>, <code>updateMany</code> ou <code>replaceOne</code> em larga escala deve passar por revisao e aprovacao formal antes de ser executado. O draft gerado pelo plugin nunca e aplicado automaticamente.
+    </div>
+  </section>
+
+  <!-- 05 Fluxo Orientacao -->
+  <section class="section" id="s5">
+    <h2><span class="num">05</span> Fluxo: Orientacao ao Usuario Final</h2>
+    <p class="lead">Acionado quando o problema nao e um bug nem um dado errado, mas uma dificuldade do usuario em operar o sistema — seja por desconhecimento do fluxo, limitacao de permissao nao compreendida ou navegacao incorreta.</p>
+
+    <h3>Passo a passo</h3>
+    <ol class="steps">
+      <li>
+        <strong>Leitura das documentacoes do monorepo</strong>
+        <span>O sistema le os arquivos de documentacao do [INTERNAL-SYSTEM] e o CLAUDE.md do CLI para entender os fluxos disponiveis e os requisitos de cada funcionalidade.</span>
+      </li>
+      <li>
+        <strong>Mapeamento do fluxo de navegacao</strong>
+        <span>Com base no relato, o sistema identifica qual rota o usuario estava tentando acessar ou qual acao estava tentando executar. Considera as rotas do CLI (<code>/editais</code>, <code>/procedure</code>, <code>/restore</code>, etc.) e os requisitos de permissao de cada uma.</span>
+      </li>
+      <li>
+        <strong>Identificacao do ponto de dificuldade</strong>
+        <span>O sistema determina onde a dificuldade ocorreu: ausencia de permissao para a funcionalidade, etapa do fluxo que o usuario nao completou corretamente, ou comportamento esperado do sistema que o usuario interpretou como erro.</span>
+      </li>
+      <li>
+        <strong>Geracao da instrucao didatica</strong>
+        <span>O sistema produz um passo a passo claro e numerado para o operador seguir em homologacao antes de repassar ao usuario. Inclui a verificacao de permissao necessaria via hook <code>usePermission()</code> e a rota exata envolvida.</span>
+      </li>
+      <li>
+        <strong>Script de resposta ao usuario</strong>
+        <span>Alem da instrucao tecnica interna, o sistema gera um texto pronto para o operador adaptar e enviar ao usuario final — em linguagem simples, sem jargao tecnico.</span>
+      </li>
+    </ol>
+
+    <h3>Estrutura do relatorio gerado</h3>
+    <pre><code><span class="tok-comment">## Orientacao ao Usuario — [titulo-do-chamado]</span>
+
+<span class="tok-prop">Rota envolvida:</span>       <span class="tok-str">/editais</span>
+<span class="tok-prop">Permissao necessaria:</span>  <span class="tok-fn">usePermission</span>(<span class="tok-str">"editais:edit"</span>) → <span class="tok-key">true</span>
+<span class="tok-prop">Cargo minimo:</span>         <span class="tok-str">operator</span> com permissao editais:edit ativa (ou admin)
+
+<span class="tok-comment">### Instrucao para o operador (testar em homologacao)</span>
+<span class="tok-key">1.</span> Acesse /admin → Permissoes e confirme que o cargo do usuario
+   tem "editais:edit" habilitado
+<span class="tok-key">2.</span> Faca login com uma conta de teste com esse cargo em homologacao
+<span class="tok-key">3.</span> Navegue ate /editais — o botao "Editar" deve aparecer no canto superior direito
+<span class="tok-key">4.</span> Confirme que o botao esta visivelmente ativo (nao desabilitado)
+<span class="tok-key">5.</span> Clique em Editar, altere um campo e salve — confirme o toast de sucesso
+
+<span class="tok-comment">### Script de resposta ao usuario final</span>
+<span class="tok-str">"Para editar um edital, seu perfil precisa ter a permissao de edicao
+ habilitada pelo administrador do sistema. Caso voce nao visualize o
+ botao 'Editar', entre em contato com o administrador para que ele
+ verifique as permissoes do seu cargo em Configuracoes > Permissoes."</span></code></pre>
+
+    <div class="callout">
+      <strong>Homologacao obrigatoria</strong>
+      O operador deve sempre testar o fluxo em ambiente de homologacao antes de repassar a instrucao ao usuario final. Isso garante que a orientacao e valida para a versao atual do sistema e evita passar informacoes incorretas.
+    </div>
+  </section>
+
+  <!-- 06 Arquitetura -->
+  <section class="section" id="s6">
+    <h2><span class="num">06</span> Arquitetura do plugin</h2>
+    <p class="lead">Como o plugin se integra ao Claude Code — da leitura do contexto ao relatorio final entregue ao operador.</p>
+
+    <h3>Componentes</h3>
+    <table class="tbl">
+      <thead>
+        <tr>
+          <th>Componente</th>
+          <th>Localizacao</th>
+          <th>Responsabilidade</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Skill /analisar-chamado</strong></td>
+          <td><code>.claude/commands/analisar-chamado.md</code></td>
+          <td>Ponto de entrada — define o prompt de sistema, instrucoes de classificacao e formato do relatorio</td>
+        </tr>
+        <tr>
+          <td><strong>CLAUDE.md (CLI)</strong></td>
+          <td><code>CLAUDE.md</code> (raiz do projeto)</td>
+          <td>Mapa de contexto ja existente — rotas, permissoes, estrutura de arquivos, API client. Lido automaticamente pelo Claude Code.</td>
+        </tr>
+        <tr>
+          <td><strong>CLAUDE.md ([INTERNAL-SYSTEM])</strong></td>
+          <td>Raiz do monorepo [INTERNAL-SYSTEM]</td>
+          <td>Mapa de contexto do repositorio alvo — precisa ser criado e mantido pela equipe [INTERNAL-SYSTEM]</td>
+        </tr>
+        <tr>
+          <td><strong>Tools de leitura</strong></td>
+          <td>Claude Code (built-in)</td>
+          <td>Grep, Read, Glob — usados pelo plugin para vasculhar o monorepo sem precisar de MCP server adicional</td>
+        </tr>
+        <tr>
+          <td><strong>Pasta de relatorios</strong></td>
+          <td><code>docs/analises/</code></td>
+          <td>Relatorios gerados salvos como arquivos <code>.md</code> para rastreabilidade e historico</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Diagrama de fluxo</h3>
+    <pre><code>Operador cola texto do chamado + prints
+              |
+              v
+     /analisar-chamado (skill)
+              |
+              v
+   Claude Code le CLAUDE.md (CLI)
+   Claude Code le CLAUDE.md ([INTERNAL-SYSTEM])
+              |
+              v
+   +----------+----------+
+   |                     |
+   v                     v
+Grep/Read/Glob      Analise do input
+no monorepo [INTERNAL-SYSTEM]   (texto + imagem)
+   |                     |
+   +----------+----------+
+              |
+              v
+     Classificacao do tipo
+     BUG | Ajuste em Base | Orientacao
+              |
+     +--------+--------+
+     |        |        |
+     v        v        v
+  Fluxo    Fluxo    Fluxo
+  BUG      Base     Orientacao
+     |        |        |
+     +--------+--------+
+              |
+              v
+   Relatorio estruturado
+   (exibido no terminal)
+              |
+              v
+   Salvo em docs/analises/
+   AAAA-MM-DD-titulo.md</code></pre>
+
+    <h3>Inputs e outputs</h3>
+    <table class="tbl">
+      <thead>
+        <tr>
+          <th>Direcao</th>
+          <th>Item</th>
+          <th>Formato</th>
+          <th>Obrigatorio</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Input</td>
+          <td>Texto do chamado</td>
+          <td>Texto livre colado no terminal</td>
+          <td><span class="badge badge--danger">Sim</span></td>
+        </tr>
+        <tr>
+          <td>Input</td>
+          <td>Print / evidencia</td>
+          <td>Imagem anexada ao contexto do Claude Code</td>
+          <td><span class="badge">Opcional</span></td>
+        </tr>
+        <tr>
+          <td>Output</td>
+          <td>Relatorio tecnico</td>
+          <td>Markdown estruturado exibido no terminal</td>
+          <td><span class="badge badge--ok">Sempre</span></td>
+        </tr>
+        <tr>
+          <td>Output</td>
+          <td>Arquivo persistido</td>
+          <td><code>docs/analises/AAAA-MM-DD-slug.md</code></td>
+          <td><span class="badge badge--accent">Recomendado</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout callout--warn">
+      <strong>Pre-requisito critico</strong>
+      O monorepo [INTERNAL-SYSTEM] precisa ter um <code>CLAUDE.md</code> configurado na raiz com a estrutura do projeto antes que o plugin possa ser usado com precisao. Sem esse arquivo, o Claude Code nao tem contexto suficiente para navegar o repositorio com eficiencia.
+    </div>
+  </section>
+
+  <!-- 07 Roadmap -->
+  <section class="section" id="s7">
+    <h2><span class="num">07</span> Roadmap de implementacao</h2>
+    <p class="lead">Etapas ordenadas para colocar o plugin em operacao — da configuracao do contexto ao primeiro uso real com chamados do [INTERNAL-SYSTEM].</p>
+
+    <ol class="steps">
+      <li>
+        <strong>Definir estrutura do CLAUDE.md no monorepo [INTERNAL-SYSTEM]</strong>
+        <span>Documentar rotas, colecoes MongoDB, endpoints da API, permissoes, fluxos criticos e convencoes do codigo — esse arquivo e o "mapa" que o plugin vai ler primeiro em cada analise.</span>
+      </li>
+      <li>
+        <strong>Criar a skill /analisar-chamado</strong>
+        <span>Adicionar o arquivo <code>.claude/commands/analisar-chamado.md</code> no repositorio CLI (ou no [INTERNAL-SYSTEM]). O arquivo define o prompt de sistema, as instrucoes de classificacao e o formato esperado para cada tipo de relatorio.</span>
+      </li>
+      <li>
+        <strong>Implementar a logica de classificacao</strong>
+        <span>Escrever as instrucoes de prompt que ensinam o Claude Code a distinguir entre BUG, Ajuste em Base e Orientacao — com exemplos de cada tipo para calibrar a classificacao.</span>
+      </li>
+      <li>
+        <strong>Integrar leitura do monorepo via tools nativos</strong>
+        <span>Validar que o Claude Code consegue usar Grep, Read e Glob no repositorio [INTERNAL-SYSTEM] a partir do contexto da skill. Mapear os caminhos criticos que o plugin deve priorizar em cada tipo de analise.</span>
+      </li>
+      <li>
+        <strong>Implementar gerador de novo procedimento CLI</strong>
+        <span>Para o fluxo de Ajuste em Base sem procedimento existente: criar o template de draft e integrar com o modelo de dados da rota <code>/procedure</code> do CLI para que o draft gerado seja diretamente importavel.</span>
+      </li>
+      <li>
+        <strong>Criar pasta docs/analises/ e definir convencao de nomes</strong>
+        <span>Estrutura de arquivo: <code>AAAA-MM-DD-slug-do-chamado.md</code>. Considerar se os relatorios devem ser commitados no repositorio ou mantidos apenas localmente pelo operador.</span>
+      </li>
+      <li>
+        <strong>Testes com chamados reais em homologacao</strong>
+        <span>Selecionar 5 a 10 chamados historicos do [INTERNAL-SYSTEM] (um de cada tipo) e executar o plugin. Avaliar precisao da classificacao, qualidade do relatorio e tempo de execucao. Iterar no prompt da skill com base nos resultados.</span>
+      </li>
+      <li>
+        <strong>Documentar processo de uso para operadores [COMPANY]</strong>
+        <span>Criar um guia rapido (pode ser um segundo HTML com tema [COMPANY]) explicando como instalar o Claude Code, como usar o comando <code>/analisar-chamado</code> e como interpretar os tres tipos de relatorio gerados.</span>
+      </li>
+    </ol>
+
+    <h3>Perguntas em aberto</h3>
+
+    <details>
+      <summary>O plugin precisa de acesso ao repositorio [INTERNAL-SYSTEM] em tempo real?</summary>
+      <p>Sim. O Claude Code precisa ter o repositorio [INTERNAL-SYSTEM] clonado localmente (ou acesso via MCP server de filesystem) para usar as ferramentas Grep, Read e Glob. Uma alternativa e exportar snapshots do codigo relevante para um diretorio acessivel ao plugin — mas isso adiciona complexidade de manutencao.</p>
+    </details>
+
+    <details>
+      <summary>Como lidar com chamados que nao se encaixam em nenhuma categoria?</summary>
+      <p>O plugin deve reconhecer quando nao tem contexto suficiente para classificar com confianca e, nesses casos, retornar uma lista de perguntas estruturadas para o operador coletar mais informacoes antes de uma segunda analise. Nunca deve forcar uma classificacao incorreta.</p>
+    </details>
+
+    <details>
+      <summary>Os relatorios gerados devem ser commitados no repositorio?</summary>
+      <p>Recomendavel adicionar <code>docs/analises/</code> ao <code>.gitignore</code> inicialmente. Os relatorios contem dados de chamados que podem ser sensiveis. Uma vez que o processo estiver maduro, avaliar se faz sentido versionar os relatorios anonimizados como base de conhecimento para melhorar o prompt da skill ao longo do tempo.</p>
+    </details>
+
+    <details>
+      <summary>Qual o modelo Claude recomendado para a skill?</summary>
+      <p>Para analise tecnica de qualidade — especialmente no fluxo de BUG, que exige leitura e raciocinio sobre codigo — recomenda-se usar Claude Opus 4.8 ou Sonnet 4.6. O modelo pode ser especificado no cabecalho da skill com o parametro <code>model</code>. Para chamados simples de orientacao, Haiku 4.5 pode ser suficiente e mais economico.</p>
+    </details>
+  </section>
+
+  <footer class="footer">
+    <p><strong>Proximo passo</strong> — configurar o CLAUDE.md no monorepo [INTERNAL-SYSTEM] e criar o arquivo <code>.claude/commands/analisar-chamado.md</code> com o prompt de sistema da skill.</p>
+    <p>Documentacao gerada em 11/06/2026 · [COMPANY]</p>
+  </footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,1112 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+<title>Pipeon — Documentação Técnica</title>
+<style>
+/* ============================================================
+ * [COMPANY] Docs — Tema [COMPANY] (auto-contido)
+ * ============================================================ */
+:root {
+	--c-bg: #f7f9fb;
+	--c-surface: #ffffff;
+	--c-surface-2: #f1f4f7;
+	--c-surface-3: #e5eaf0;
+	--c-border: #dde2e8;
+	--c-text: #1f2328;
+	--c-text-soft: #4a5560;
+	--c-text-muted: #6b7280;
+	--c-accent: #066aab;
+	--c-accent-strong: #054a78;
+	--c-accent-soft: #e8f3fb;
+	--c-accent-bright: #4facfe;
+	--c-ok: #1f7a3a;
+	--c-ok-soft: #ecfdf3;
+	--c-warn: #b45309;
+	--c-warn-soft: #fffaeb;
+	--c-err: #b91c1c;
+	--c-err-soft: #fef2f2;
+	--c-code-bg: #1e293b;
+	--c-code-text: #e2e8f0;
+	--c-code-keyword: #f97583;
+	--c-code-fn: #c4b5fd;
+	--c-code-string: #93c5fd;
+	--c-code-prop: #7dd3fc;
+	--c-code-comment: #94a3b8;
+	--ff-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", "Segoe UI", system-ui, sans-serif;
+	--ff-mono: "SF Mono", "Monaco", "Menlo", "Consolas", monospace;
+	--fs-xs: 12px; --fs-sm: 13px; --fs-base: 15px; --fs-md: 16px;
+	--fs-lg: 17px; --fs-xl: 20px; --fs-2xl: 24px; --fs-3xl: 28px; --fs-4xl: 32px;
+	--lh-tight: 1.15; --lh-snug: 1.4; --lh-normal: 1.65;
+	--fw-normal: 400; --fw-medium: 500; --fw-semibold: 600; --fw-bold: 700;
+	--space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px;
+	--space-5: 20px; --space-6: 24px; --space-7: 32px; --space-8: 40px;
+	--space-9: 56px; --space-10: 72px;
+	--radius-sm: 4px; --radius-md: 6px; --radius-lg: 10px;
+	--radius-xl: 14px; --radius-full: 999px;
+	--shadow-sm: 0 1px 2px rgba(15,23,42,.04);
+	--shadow-md: 0 1px 3px rgba(15,23,42,.05),0 2px 8px rgba(15,23,42,.04);
+	--shadow-lg: 0 4px 12px rgba(15,23,42,.08),0 12px 24px rgba(15,23,42,.06);
+	--content-max: 880px;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:var(--ff-sans);font-size:var(--fs-md);line-height:var(--lh-normal);color:var(--c-text);background:var(--c-bg);-webkit-font-smoothing:antialiased}
+.page-wrap{max-width:var(--content-max);margin:0 auto;padding:var(--space-7) var(--space-6) var(--space-10)}
+.hero{background:linear-gradient(135deg,var(--c-accent-strong) 0%,var(--c-accent) 60%,var(--c-accent-bright) 100%);color:#fff;border-radius:var(--radius-xl);padding:var(--space-8) var(--space-7);margin-bottom:var(--space-8);box-shadow:var(--shadow-md)}
+.hero__eyebrow{display:inline-flex;align-items:center;gap:var(--space-1);background:rgba(255,255,255,.18);color:#fff;padding:var(--space-1) var(--space-3);border-radius:var(--radius-full);font-size:11px;font-weight:var(--fw-semibold);text-transform:uppercase;letter-spacing:.6px;margin-bottom:var(--space-4);backdrop-filter:blur(6px)}
+.hero__title{font-size:var(--fs-4xl);font-weight:var(--fw-bold);letter-spacing:-.02em;margin:0 0 var(--space-3);line-height:var(--lh-tight);color:#fff}
+.hero__subtitle{font-size:var(--fs-lg);margin:0 0 var(--space-6);max-width:640px;color:#fff;opacity:.95}
+.hero__meta{display:flex;flex-wrap:wrap;gap:var(--space-4) var(--space-7);font-size:var(--fs-sm);color:#fff;opacity:.95}
+.hero,.hero p,.hero li,.hero a,.hero span{color:#fff}
+.hero a{text-decoration:underline}
+.hero__meta-item strong{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.5px;opacity:.75;margin-bottom:2px;font-weight:var(--fw-semibold);color:#fff}
+.toc{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--radius-lg);padding:var(--space-4) var(--space-5);margin-bottom:var(--space-8)}
+.toc__title{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--c-text-muted);margin-bottom:var(--space-2);font-weight:var(--fw-semibold)}
+.toc__list{margin:0;padding-left:var(--space-5);columns:2;column-gap:var(--space-7)}
+.toc__list li{margin-bottom:var(--space-1);break-inside:avoid}
+.toc__list a{color:var(--c-text-soft);text-decoration:none;font-size:var(--fs-base)}
+.toc__list a:hover{color:var(--c-accent);text-decoration:underline}
+.section{margin-bottom:var(--space-9)}
+.section h2{font-size:var(--fs-2xl);font-weight:var(--fw-bold);letter-spacing:-.01em;margin:0 0 var(--space-2);display:flex;align-items:baseline;gap:var(--space-3)}
+.section h2 .num{color:var(--c-accent);font-size:var(--fs-sm);font-weight:var(--fw-semibold);font-feature-settings:"tnum"}
+.section h3{font-size:var(--fs-md);font-weight:var(--fw-semibold);margin:var(--space-6) 0 var(--space-3)}
+.section h4{font-size:var(--fs-base);font-weight:var(--fw-semibold);margin:var(--space-4) 0 var(--space-2);color:var(--c-text)}
+.section .lead{color:var(--c-text-muted);margin:0 0 var(--space-6);font-size:var(--fs-base)}
+p{margin:0 0 var(--space-3);color:var(--c-text-soft)}
+ul,ol{margin:0 0 var(--space-3);padding-left:var(--space-5);color:var(--c-text-soft)}
+li{margin-bottom:var(--space-1)}
+strong{color:var(--c-text)}
+em{font-style:italic;color:var(--c-text-soft)}
+a{color:var(--c-accent)}
+a:hover{text-decoration:underline}
+.callout{border-left:3px solid var(--c-accent);background:var(--c-accent-soft);padding:var(--space-3) var(--space-5);border-radius:0 var(--radius-md) var(--radius-md) 0;margin:var(--space-4) 0;font-size:var(--fs-base)}
+.callout strong{display:block;margin-bottom:var(--space-1);font-size:var(--fs-xs);text-transform:uppercase;letter-spacing:.5px}
+.callout--ok{border-left-color:var(--c-ok);background:var(--c-ok-soft)}
+.callout--warn{border-left-color:var(--c-warn);background:var(--c-warn-soft)}
+.callout--danger{border-left-color:var(--c-err);background:var(--c-err-soft)}
+pre{background:var(--c-code-bg);color:var(--c-code-text);border-radius:var(--radius-md);padding:var(--space-4) var(--space-5);font-family:var(--ff-mono);font-size:var(--fs-sm);line-height:1.55;overflow-x:auto;margin:var(--space-4) 0;box-shadow:var(--shadow-md)}
+code{font-family:var(--ff-mono);font-size:.88em;background:var(--c-surface-2);color:var(--c-accent);padding:1px var(--space-2);border-radius:var(--radius-sm)}
+pre code{background:transparent;color:inherit;padding:0}
+.tok-key{color:var(--c-code-keyword)}
+.tok-fn{color:var(--c-code-fn)}
+.tok-str{color:var(--c-code-string)}
+.tok-prop{color:var(--c-code-prop)}
+.tok-comment{color:var(--c-code-comment);font-style:italic}
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-4);margin:var(--space-4) 0}
+@media(max-width:720px){.compare{grid-template-columns:1fr}}
+.compare__card{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--radius-lg);padding:var(--space-5)}
+.compare__card--bad{border-top:3px solid var(--c-err)}
+.compare__card--good{border-top:3px solid var(--c-ok)}
+.compare__card h4{font-size:var(--fs-sm);text-transform:uppercase;letter-spacing:.5px;margin:0 0 var(--space-3);color:var(--c-text-muted)}
+.compare__verdict{font-size:var(--fs-base);font-weight:var(--fw-semibold);margin:0 0 var(--space-2)}
+.compare__card--bad .compare__verdict{color:var(--c-err)}
+.compare__card--good .compare__verdict{color:var(--c-ok)}
+.compare__card ul{margin:0;padding-left:var(--space-4);font-size:var(--fs-sm)}
+.compare__card li{color:var(--c-text-soft)}
+.steps{counter-reset:step;list-style:none;padding:0}
+.steps li{position:relative;padding:var(--space-3) var(--space-4) var(--space-3) 56px;background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--radius-md);margin-bottom:var(--space-2);counter-increment:step}
+.steps li::before{content:counter(step);position:absolute;left:var(--space-4);top:50%;transform:translateY(-50%);width:28px;height:28px;background:var(--c-accent);color:#fff;border-radius:var(--radius-full);display:flex;align-items:center;justify-content:center;font-weight:var(--fw-bold);font-size:var(--fs-sm)}
+.steps li strong{display:block;margin-bottom:2px}
+.steps li span{font-size:var(--fs-sm);color:var(--c-text-muted)}
+.link-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:var(--space-3);margin:var(--space-5) 0}
+.link-card{display:block;background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--radius-md);padding:var(--space-4) var(--space-5);text-decoration:none;color:var(--c-text);transition:border-color .15s,transform .15s}
+.link-card:hover{border-color:var(--c-accent);transform:translateY(-1px);text-decoration:none}
+.link-card__eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--c-text-muted);font-weight:var(--fw-semibold);margin-bottom:var(--space-1)}
+.link-card__title{font-size:var(--fs-base);font-weight:var(--fw-semibold);margin:0 0 var(--space-1)}
+.link-card__url{font-size:var(--fs-xs);color:var(--c-text-muted);word-break:break-all;font-family:var(--ff-mono)}
+details{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--radius-md);padding:var(--space-3) var(--space-5);margin-bottom:var(--space-2)}
+details[open]{background:var(--c-surface-2)}
+details summary{cursor:pointer;font-weight:var(--fw-semibold);font-size:var(--fs-base);color:var(--c-text)}
+details summary::-webkit-details-marker{color:var(--c-accent)}
+details p,details ul{margin-top:var(--space-3);font-size:var(--fs-base)}
+.badge{display:inline-flex;align-items:center;gap:var(--space-1);padding:2px var(--space-2);border-radius:var(--radius-full);font-size:11px;font-weight:var(--fw-semibold);letter-spacing:.3px;text-transform:uppercase;background:var(--c-surface-2);color:var(--c-text-soft)}
+.badge--ok{background:var(--c-ok-soft);color:var(--c-ok)}
+.badge--warn{background:var(--c-warn-soft);color:var(--c-warn)}
+.badge--danger{background:var(--c-err-soft);color:var(--c-err)}
+.badge--accent{background:var(--c-accent-soft);color:var(--c-accent)}
+.tbl{width:100%;border-collapse:collapse;font-size:var(--fs-base);background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--radius-md);overflow:hidden;margin:var(--space-4) 0}
+.tbl th,.tbl td{padding:var(--space-2) var(--space-4);text-align:left;border-bottom:1px solid var(--c-border)}
+.tbl th{background:var(--c-surface-2);font-size:var(--fs-sm);font-weight:var(--fw-semibold);color:var(--c-text-soft);text-transform:uppercase;letter-spacing:.3px}
+.tbl tr:last-child td{border-bottom:0}
+.tbl td{color:var(--c-text-soft)}
+.footer{margin-top:var(--space-10);padding-top:var(--space-6);border-top:1px solid var(--c-border);font-size:var(--fs-sm);color:var(--c-text-muted);text-align:center}
+.footer p{margin:var(--space-1) 0;color:var(--c-text-muted)}
+.endpoint-block{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--radius-lg);margin:var(--space-5) 0;overflow:hidden}
+.endpoint-header{display:flex;align-items:center;gap:var(--space-3);padding:var(--space-3) var(--space-5);border-bottom:1px solid var(--c-border);background:var(--c-surface-2)}
+.endpoint-method{font-family:var(--ff-mono);font-size:var(--fs-sm);font-weight:var(--fw-bold);padding:2px 10px;border-radius:var(--radius-sm);text-transform:uppercase}
+.method-get{background:#ecfdf3;color:#1f7a3a}
+.method-post{background:#e8f3fb;color:#066aab}
+.endpoint-path{font-family:var(--ff-mono);font-size:var(--fs-base);color:var(--c-text);font-weight:var(--fw-medium)}
+.endpoint-body{padding:var(--space-4) var(--space-5)}
+.endpoint-body p{margin:0 0 var(--space-2)}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-5)}
+@media(max-width:640px){.two-col{grid-template-columns:1fr}}
+@media print{body{background:#fff;color:#000}.hero{background:#fff;color:#000;border:1px solid #ccc}.hero__title,.hero__meta-item strong{color:#000}pre{box-shadow:none}a{color:#000;text-decoration:underline}}
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+<!-- Hero -->
+<header class="hero">
+  <span class="hero__eyebrow">[COMPANY] · Documentacao Tecnica</span>
+  <h1 class="hero__title">Pipeon</h1>
+  <p class="hero__subtitle">Plataforma interna de automacao de processos MongoDB. Documentacao completa de arquitetura, rotas, banco de dados e API REST.</p>
+  <div class="hero__meta">
+    <div class="hero__meta-item"><strong>Versao</strong>1.0</div>
+    <div class="hero__meta-item"><strong>Data</strong>03/06/2026</div>
+    <div class="hero__meta-item"><strong>Stack</strong>React 19 + TanStack Start + Express + MongoDB</div>
+    <div class="hero__meta-item"><strong>Ambiente dev</strong>http://localhost:5173 (frontend) | http://localhost:5000 (API)</div>
+  </div>
+</header>
+
+<!-- TOC -->
+<nav class="toc">
+  <span class="toc__title">Sumario</span>
+  <ol class="toc__list">
+    <li><a href="#s1">Visao Geral da Arquitetura</a></li>
+    <li><a href="#s2">Fluxo de Autenticacao</a></li>
+    <li><a href="#s3">Rotas e Paginas</a></li>
+    <li><a href="#s4">Sistema de Permissoes</a></li>
+    <li><a href="#s5">Banco de Dados — Colecoes</a></li>
+    <li><a href="#s6">API REST — Endpoints</a></li>
+    <li><a href="#s7">Procedimentos Dinamicos</a></li>
+    <li><a href="#s8">Scheduler Automatico</a></li>
+    <li><a href="#s9">Variaveis de Ambiente</a></li>
+    <li><a href="#s10">Regras Criticas</a></li>
+  </ol>
+</nav>
+
+<!-- 01 — Arquitetura -->
+<section class="section" id="s1">
+  <h2><span class="num">01</span> Visao Geral da Arquitetura</h2>
+  <p class="lead">O Pipeon e um sistema full-stack com frontend React e dois backends alternativos: Express local para desenvolvimento e Cloudflare Worker para producao.</p>
+
+  <div class="callout callout--warn">
+    <strong>Regra critica de banco</strong>
+    Procedimentos so podem operar contra o banco <code>target-database</code>. Nunca apontar logica de procedimento para outros bancos.
+  </div>
+
+  <h3>Stack tecnologico</h3>
+  <table class="tbl">
+    <thead><tr><th>Camada</th><th>Tecnologia</th><th>Detalhe</th></tr></thead>
+    <tbody>
+      <tr><td>Frontend</td><td>React 19 + TanStack Start</td><td>Roteamento baseado em arquivos, SSR opcional</td></tr>
+      <tr><td>Roteamento</td><td>TanStack Router (file-based)</td><td>Arvore gerada em <code>src/routeTree.gen.ts</code> — nao editar manualmente</td></tr>
+      <tr><td>UI</td><td>Shadcn/ui + Tailwind v4</td><td>Componentes em <code>src/ui/</code>, tema em <code>src/styles.css</code></td></tr>
+      <tr><td>API (dev)</td><td>Express.js — porta 5000</td><td><code>local-api/server.js</code></td></tr>
+      <tr><td>API (prod)</td><td>Cloudflare Worker</td><td><code>src/server.ts</code> + <code>wrangler.jsonc</code></td></tr>
+      <tr><td>Banco sistema</td><td>MongoDB — banco <code>pipeon</code></td><td>Usuarios, procedimentos, agendamentos, operacoes</td></tr>
+      <tr><td>Banco alvo</td><td>MongoDB — banco <code>target-database</code></td><td>Dados operacionais dos clientes</td></tr>
+      <tr><td>Auth</td><td>JWT (jsonwebtoken)</td><td>Expiracao 8h, payload: sub, email, name, role</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Estado da aplicacao</h3>
+  <table class="tbl">
+    <thead><tr><th>Dado</th><th>Armazenamento</th><th>Observacao</th></tr></thead>
+    <tbody>
+      <tr><td>Token JWT + config de sessao</td><td><code>sessionStorage</code></td><td>Limpo no logout ou expiracao</td></tr>
+      <tr><td>Permissoes de roles</td><td><code>localStorage</code></td><td>Sincronizado do banco no login</td></tr>
+      <tr><td>Sistemas cadastrados</td><td><code>localStorage</code></td><td>Lista de <code>SystemDefinition[]</code></td></tr>
+      <tr><td>Dados do servidor</td><td>TanStack Query</td><td>Cache em memoria durante a sessao</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Config de sessao ativa (AtlasConfig)</h3>
+  <p>Apos a selecao da session em <code>/select-session</code>, os dados ficam em <code>sessionStorage</code> (chave: <code>fase-cli-atlas-config</code>) e sao usados por toda chamada <code>atlasCall()</code>:</p>
+  <pre><code>{
+  <span class="tok-prop">"token"</span>:           <span class="tok-str">"eyJhbGci..."</span>,         <span class="tok-comment">// JWT do usuario logado</span>
+  <span class="tok-prop">"database"</span>:        <span class="tok-str">"target-database"</span>,       <span class="tok-comment">// nome do banco selecionado na session</span>
+  <span class="tok-prop">"connectionString"</span>: <span class="tok-str">"mongodb+srv://..."</span>,   <span class="tok-comment">// da SystemDefinition (opcional)</span>
+  <span class="tok-prop">"systemName"</span>:      <span class="tok-str">"[INTERNAL-SYSTEM] Expresso"</span>,      <span class="tok-comment">// nome do sistema escolhido</span>
+  <span class="tok-prop">"sessionLabel"</span>:    <span class="tok-str">"target-database"</span>        <span class="tok-comment">// label da session escolhida</span>
+}</code></pre>
+
+  <h3>Variaveis de configuracao (frontend)</h3>
+  <pre><code><span class="tok-comment"># .env na raiz do projeto</span>
+<span class="tok-prop">VITE_API_URL</span>=<span class="tok-str">http://localhost:5000</span>   <span class="tok-comment"># dev</span>
+<span class="tok-prop">VITE_API_URL</span>=<span class="tok-str">https://your-worker.your-subdomain.workers.dev</span>  <span class="tok-comment"># prod</span></code></pre>
+
+  <h3>Comandos de execucao</h3>
+  <pre><code><span class="tok-comment"># Frontend (raiz do projeto)</span>
+<span class="tok-fn">npm run dev</span>       <span class="tok-comment"># Vite dev server — porta 5173</span>
+<span class="tok-fn">npm run build</span>     <span class="tok-comment"># Build para Cloudflare Workers</span>
+<span class="tok-fn">npm run lint</span>      <span class="tok-comment"># ESLint + TypeScript check</span>
+
+<span class="tok-comment"># Backend (local-api/)</span>
+<span class="tok-fn">npm start</span>         <span class="tok-comment"># Express proxy — porta 5000</span></code></pre>
+</section>
+
+<!-- 02 — Autenticacao -->
+<section class="section" id="s2">
+  <h2><span class="num">02</span> Fluxo de Autenticacao</h2>
+  <p class="lead">Login baseado em e-mail sem senha visivel. O JWT retornado carrega identidade e role do usuario.</p>
+
+  <ol class="steps">
+    <li>
+      <strong>Login — rota <code>/</code></strong>
+      <span>Usuario informa o e-mail. Frontend chama <code>POST /api/auth/login</code>. Servidor verifica em <code>pipeon_users</code> e retorna um JWT assinado.</span>
+    </li>
+    <li>
+      <strong>Selecao de sistema — rota <code>/select-system</code></strong>
+      <span>Lista os <code>SystemDefinition</code> salvos no <code>localStorage</code>. Usuario escolhe qual sistema deseja acessar.</span>
+    </li>
+    <li>
+      <strong>Selecao de sessao — rota <code>/select-session</code></strong>
+      <span>Exibe as sessions do sistema escolhido (ex: target-database, pipeon). Cada session define o banco-alvo que sera usado nas operacoes.</span>
+    </li>
+    <li>
+      <strong>Menu principal — rota <code>/menu</code></strong>
+      <span>Dashboard com acoes filtradas pela role e permissoes do usuario. Token e config da sessao ficam no <code>sessionStorage</code>.</span>
+    </li>
+  </ol>
+
+  <h3>Payload do JWT</h3>
+  <pre><code>{
+  <span class="tok-prop">"sub"</span>:   <span class="tok-str">"65a1b2c3d4e5f6a7b8c9d0e1"</span>,  <span class="tok-comment">// MongoDB _id do usuario</span>
+  <span class="tok-prop">"email"</span>: <span class="tok-str">"operador@example.com"</span>,
+  <span class="tok-prop">"name"</span>:  <span class="tok-str">"Nome Completo"</span>,
+  <span class="tok-prop">"role"</span>:  <span class="tok-str">"operator"</span>,             <span class="tok-comment">// admin | operator | user</span>
+  <span class="tok-prop">"exp"</span>:   <span class="tok-fn">1748980800</span>             <span class="tok-comment">// 8 horas a partir do login</span>
+}</code></pre>
+
+  <div class="callout">
+    <strong>Sessao expirada</strong>
+    Quando o token expira (401), a lib <code>atlas.ts</code> limpa o <code>sessionStorage</code> automaticamente e redireciona para <code>/</code> com mensagem de erro.
+  </div>
+</section>
+
+<!-- 03 — Rotas -->
+<section class="section" id="s3">
+  <h2><span class="num">03</span> Rotas e Paginas</h2>
+  <p class="lead">Roteamento baseado em arquivos via TanStack Router. Cada arquivo em <code>src/routes/</code> corresponde a uma rota.</p>
+
+  <h3>Mapa de rotas</h3>
+  <table class="tbl">
+    <thead><tr><th>Rota</th><th>Arquivo</th><th>Acesso</th><th>Descricao</th></tr></thead>
+    <tbody>
+      <tr><td><code>/</code></td><td><code>index.tsx</code></td><td>Publico</td><td>Tela de login</td></tr>
+      <tr><td><code>/select-system</code></td><td><code>select-system.tsx</code></td><td>Autenticado</td><td>Selecao de sistema</td></tr>
+      <tr><td><code>/select-session</code></td><td><code>select-session.tsx</code></td><td>Autenticado</td><td>Selecao de sessao/banco</td></tr>
+      <tr><td><code>/menu</code></td><td><code>menu.tsx</code></td><td>Autenticado</td><td>Dashboard principal</td></tr>
+      <tr><td><code>/procedure/</code></td><td><code>procedure.index.tsx</code></td><td>Permissao: procedure</td><td>Lista de procedimentos</td></tr>
+      <tr><td><code>/procedure/reset-evaluations</code></td><td><code>procedure.reset-evaluations.tsx</code></td><td>Permissao: procedure</td><td>Procedimento hardcoded de reset</td></tr>
+      <tr><td><code>/procedure/$id</code></td><td><code>procedure.$id.tsx</code></td><td>Permissao: procedure</td><td>Executor dinamico de procedimentos</td></tr>
+      <tr><td><code>/admin</code></td><td><code>admin.tsx</code></td><td>Role: admin</td><td>Painel de administracao</td></tr>
+      <tr><td><code>/scheduled</code></td><td><code>scheduled.tsx</code></td><td>Autenticado</td><td>Procedimentos agendados</td></tr>
+      <tr><td><code>/history</code></td><td><code>history.tsx</code></td><td>Permissao: history</td><td>Historico de operacoes</td></tr>
+      <tr><td><code>/restore</code></td><td><code>restore.tsx</code></td><td>Permissao: restore</td><td>Restauracao de backups</td></tr>
+      <tr><td><code>/profile</code></td><td><code>profile.tsx</code></td><td>Autenticado</td><td>Perfil do usuario logado</td></tr>
+      <tr><td><code>/forgot-password</code></td><td><code>forgot-password.tsx</code></td><td>Publico</td><td>Recuperacao de senha</td></tr>
+    </tbody>
+  </table>
+
+  <h3>/procedure/ — Lista de Procedimentos</h3>
+  <p>Exibe todos os procedimentos disponiveis para execucao. Valida que o banco ativo e <code>target-database</code> antes de renderizar.</p>
+  <ul>
+    <li><strong>Entrada hardcoded:</strong> "Retornar avaliacoes para pendentes para substituicao de avaliador(a)" — direciona para <code>/procedure/reset-evaluations</code></li>
+    <li><strong>Entradas dinamicas:</strong> buscadas via <code>GET /api/pipeon/procedures</code>, filtrando <code>isActive: true</code> — cada uma direciona para <code>/procedure/$id</code></li>
+  </ul>
+
+  <h3>/procedure/reset-evaluations — Reset de Avaliacoes</h3>
+  <p>Procedimento especifico com logica propria. Fluxo em 4 etapas com stepper visual:</p>
+  <ol class="steps">
+    <li><strong>Identificacao</strong><span>Numero do chamado (ticket) + ObjectId do edital (<code>notice</code>)</span></li>
+    <li><strong>Selecao do avaliador</strong><span>Busca avaliadores via <code>aggregate</code> na colecao <code>evaluations</code> do banco target-database</span></li>
+    <li><strong>Confirmacao</strong><span>Dry-run mostrando status atuais e campos que serao removidos. Opcao de agendar para depois.</span></li>
+    <li><strong>Execucao</strong><span>Backup ZIP local + backup no banco pipeon + reset de status + limpeza de campos phaseForm</span></li>
+  </ol>
+
+  <p><strong>Operacoes executadas no banco target-database:</strong></p>
+  <pre><code><span class="tok-comment">// Passo 1 — Backup local (ZIP) e remoto (pipeon_auto_backups)</span>
+
+<span class="tok-comment">// Passo 2 — Reset de status</span>
+<span class="tok-key">updateMany</span>(<span class="tok-str">"evaluations"</span>, { filter }, {
+  <span class="tok-prop">$set</span>: { <span class="tok-prop">status</span>: <span class="tok-str">"NOTSTARTED"</span> },
+  <span class="tok-prop">$unset</span>: {
+    <span class="tok-prop">evaluationAverage</span>: <span class="tok-str">""</span>, <span class="tok-prop">evaluationAverageByBlocks</span>: <span class="tok-str">""</span>,
+    <span class="tok-prop">evaluationSum</span>: <span class="tok-str">""</span>, <span class="tok-prop">submittedDate</span>: <span class="tok-str">""</span>, <span class="tok-prop">evaluatorNote</span>: <span class="tok-str">""</span>
+  }
+})
+
+<span class="tok-comment">// Passo 3 — Limpeza do formulario</span>
+<span class="tok-key">updateMany</span>(<span class="tok-str">"evaluations"</span>, { filter }, {
+  <span class="tok-prop">$unset</span>: {
+    <span class="tok-str">"phaseForm.blocks.$[].fields.$[].value"</span>: <span class="tok-str">""</span>,
+    <span class="tok-str">"phaseForm.blocks.$[].sumValue"</span>: <span class="tok-str">""</span>
+  }
+})</code></pre>
+
+  <h3>/procedure/$id — Executor Dinamico</h3>
+  <p>Executa qualquer procedimento registrado em <code>pipeon_procedures</code>. Parametro <code>id</code> e o <code>_id</code> do documento no MongoDB.</p>
+  <ul>
+    <li>Busca a definicao do procedimento via <code>GET /api/pipeon/procedures</code></li>
+    <li>Renderiza formulario com base em <code>procedure.inputs</code></li>
+    <li>Executa cada step em sequencia, interpolando variaveis <code>&#123;&#123;nome&#125;&#125;</code></li>
+    <li>Registra log em <code>pipeon_operations</code> ao final</li>
+  </ul>
+
+  <h3>/admin — Painel de Administracao</h3>
+  <p>Exclusivo para role <code>admin</code>. Organizado em 4 abas:</p>
+
+  <details>
+    <summary>Aba Usuarios</summary>
+    <ul>
+      <li>Lista todos os usuarios de <code>pipeon_users</code></li>
+      <li>Criar usuario: <code>POST /api/users</code> com campos name, email, password, role</li>
+      <li>Editar role ou status ativo: <code>POST /api/users/:id/update</code></li>
+    </ul>
+  </details>
+
+  <details>
+    <summary>Aba Permissoes</summary>
+    <ul>
+      <li>Configura quais permissoes os roles <code>operator</code> e <code>user</code> possuem</li>
+      <li>Permissoes disponíveis: <code>procedure</code>, <code>history</code>, <code>restore</code></li>
+      <li>Role <code>admin</code> sempre tem acesso total — nao e configuravel</li>
+      <li>Persiste no documento <code>_id: "role_permissions"</code> em <code>pipeon_settings</code></li>
+      <li>Cache local em <code>localStorage</code>, sincronizado no login</li>
+    </ul>
+  </details>
+
+  <details>
+    <summary>Aba Sistemas</summary>
+    <p style="margin-top:12px;color:var(--c-text-soft);font-size:15px;">Gerencia a lista de <code>SystemDefinition[]</code> salva em <code>localStorage</code> (chave: <code>pipeon-systems</code>). Cada sistema agrupa uma ou mais sessions (conexoes banco/ambiente).</p>
+
+    <p><strong>Estrutura SystemDefinition</strong></p>
+    <pre><code>{
+  <span class="tok-prop">"id"</span>:               <span class="tok-str">"target-prod"</span>,          <span class="tok-comment">// identificador unico (string)</span>
+  <span class="tok-prop">"name"</span>:             <span class="tok-str">"[INTERNAL-SYSTEM] Expresso"</span>,
+  <span class="tok-prop">"description"</span>:      <span class="tok-str">"Ambiente de producao"</span>, <span class="tok-comment">// opcional</span>
+  <span class="tok-prop">"connectionString"</span>: <span class="tok-str">"mongodb+srv://..."</span>,    <span class="tok-comment">// opcional — se vazio usa localhost</span>
+  <span class="tok-prop">"createdAt"</span>:        <span class="tok-str">"2026-06-03T00:00:00.000Z"</span>,
+  <span class="tok-prop">"sessions"</span>: [
+    {
+      <span class="tok-prop">"id"</span>:          <span class="tok-str">"sample-prod-conn"</span>,
+      <span class="tok-prop">"label"</span>:       <span class="tok-str">"target-database"</span>,         <span class="tok-comment">// nome exibido ao usuario</span>
+      <span class="tok-prop">"database"</span>:    <span class="tok-str">"target-database"</span>,         <span class="tok-comment">// nome exato do banco no MongoDB</span>
+      <span class="tok-prop">"environment"</span>: <span class="tok-str">"production"</span>            <span class="tok-comment">// "production" | "staging" | "local"</span>
+    }
+  ]
+}</code></pre>
+
+    <p><strong>Sistema padrao (seed automatico)</strong></p>
+    <pre><code>{
+  <span class="tok-prop">"id"</span>:   <span class="tok-str">"local"</span>,
+  <span class="tok-prop">"name"</span>: <span class="tok-str">"Banco Local"</span>,
+  <span class="tok-prop">"description"</span>: <span class="tok-str">"MongoDB local — mongodb://localhost:27017/"</span>,
+  <span class="tok-prop">"connectionString"</span>: <span class="tok-key">undefined</span>,  <span class="tok-comment">// usa localhost por padrao</span>
+  <span class="tok-prop">"sessions"</span>: [
+    { <span class="tok-prop">"id"</span>: <span class="tok-str">"sample-local-conn"</span>, <span class="tok-prop">"label"</span>: <span class="tok-str">"target-database"</span>, <span class="tok-prop">"database"</span>: <span class="tok-str">"target-database"</span>, <span class="tok-prop">"environment"</span>: <span class="tok-str">"local"</span> },
+    { <span class="tok-prop">"id"</span>: <span class="tok-str">"local-pipeon"</span>,        <span class="tok-prop">"label"</span>: <span class="tok-str">"pipeon"</span>,        <span class="tok-prop">"database"</span>: <span class="tok-str">"pipeon"</span>,        <span class="tok-prop">"environment"</span>: <span class="tok-str">"local"</span> }
+  ]
+}</code></pre>
+
+    <p><strong>Como funciona no fluxo de login:</strong></p>
+    <ul>
+      <li>Em <code>/select-system</code>: o usuario escolhe um <code>SystemDefinition</code>. O ID escolhido fica em <code>sessionStorage</code> (chave: <code>pipeon-selected-system</code>)</li>
+      <li>Em <code>/select-session</code>: o usuario escolhe uma <code>SystemSession</code> do sistema. O <code>database</code> e a <code>connectionString</code> do sistema pai sao salvos no <code>AtlasConfig</code> em <code>sessionStorage</code></li>
+      <li>Todas as chamadas <code>atlasCall()</code> usam o <code>database</code> e <code>connectionString</code> dessa config ativa</li>
+    </ul>
+  </details>
+
+  <details>
+    <summary>Aba Procedimentos</summary>
+    <ul>
+      <li>Wizard de 3 etapas para registrar procedimentos via IA</li>
+      <li><strong>Etapa 1:</strong> Preenche manualmente nome, descricao, inputs e steps do procedimento</li>
+      <li><strong>Etapa 2:</strong> Preview do procedimento — nome, descricao, tabela de inputs, cards de steps</li>
+      <li><strong>Etapa 3:</strong> Selecao do projeto — o procedimento herda o <code>projectId</code> do projeto escolhido</li>
+      <li>Lista procedimentos cadastrados com opcao de excluir</li>
+    </ul>
+  </details>
+
+  <h3>/scheduled — Agendamentos</h3>
+  <p>Lista todos os procedimentos agendados. Acoes disponiveis por item:</p>
+  <ul>
+    <li><strong>Executar agora:</strong> redireciona para a rota do procedimento com dados pre-preenchidos via <code>sessionStorage</code> (chave: <code>pipeon-scheduled-execute</code>)</li>
+    <li><strong>Cancelar:</strong> chama <code>POST /api/pipeon/scheduled/:id/cancel</code></li>
+  </ul>
+
+  <h3>/history — Historico</h3>
+  <p>Exibe operacoes de <code>pipeon_operations</code>. Filtros: <code>ticketId</code>, <code>procedureId</code>, <code>projectId</code>, <code>limit</code> (maximo 500).</p>
+
+  <h3>/restore — Restauracao de Backup</h3>
+  <p>Carrega arquivo ZIP gerado pelo procedimento <code>reset-evaluations</code> e restaura os documentos na colecao <code>evaluations</code> do banco target-database.</p>
+</section>
+
+<!-- 04 — Permissoes -->
+<section class="section" id="s4">
+  <h2><span class="num">04</span> Sistema de Permissoes</h2>
+  <p class="lead">Controle de acesso em dois niveis: role fixo no JWT e permissoes configuradas pelo admin no banco.</p>
+
+  <table class="tbl">
+    <thead><tr><th>Role</th><th>Acesso ao Admin</th><th>Permissoes</th></tr></thead>
+    <tbody>
+      <tr><td><span class="badge badge--danger">admin</span></td><td>Sim</td><td>Tudo — nao e configuravel</td></tr>
+      <tr><td><span class="badge badge--accent">operator</span></td><td>Nao</td><td>Configuravel pelo admin (padrao: procedure, history, restore)</td></tr>
+      <tr><td><span class="badge">user</span></td><td>Nao</td><td>Configuravel pelo admin (padrao: procedure, history, restore)</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Permissoes disponiveis</h3>
+  <table class="tbl">
+    <thead><tr><th>Chave</th><th>Label</th><th>Descricao</th></tr></thead>
+    <tbody>
+      <tr><td><code>procedure</code></td><td>Executar procedimento</td><td>Acesso a selecao e execucao de procedimentos de manutencao</td></tr>
+      <tr><td><code>history</code></td><td>Historico de operacoes</td><td>Visualizacao do historico de operacoes executadas</td></tr>
+      <tr><td><code>restore</code></td><td>Restaurar backup</td><td>Restauracao de documentos a partir de arquivo de backup</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Verificacao de permissao (frontend)</h3>
+  <pre><code><span class="tok-comment">// src/lib/permissions.ts</span>
+<span class="tok-fn">checkPermission</span>(<span class="tok-prop">role</span>: <span class="tok-key">string</span>, <span class="tok-prop">key</span>: PermissionKey): <span class="tok-key">boolean</span>
+
+<span class="tok-comment">// Admin sempre retorna true. Para outros roles, consulta localStorage.</span></code></pre>
+
+  <p>As permissoes sao sincronizadas do banco no momento do login via <code>GET /api/pipeon/settings/role_permissions</code> e salvas em <code>localStorage</code>.</p>
+</section>
+
+<!-- 05 — Banco de dados -->
+<section class="section" id="s5">
+  <h2><span class="num">05</span> Banco de Dados — Colecoes</h2>
+  <p class="lead">O sistema usa dois bancos MongoDB completamente separados. O banco <code>pipeon</code> e exclusivo do sistema. O banco <code>target-database</code> contem os dados operacionais dos clientes.</p>
+
+  <div class="callout callout--danger">
+    <strong>Separacao obrigatoria</strong>
+    Nenhum dado do sistema Pipeon (usuarios, logs, operacoes, agendamentos) deve ser gravado no banco <code>target-database</code>. Toda escrita de metadados vai para o banco <code>pipeon</code>.
+  </div>
+
+  <h3>Banco: pipeon</h3>
+
+  <h4>pipeon_users</h4>
+  <pre><code>{
+  <span class="tok-prop">_id</span>:       ObjectId,
+  <span class="tok-prop">name</span>:      <span class="tok-str">"Nome Completo"</span>,
+  <span class="tok-prop">email</span>:     <span class="tok-str">"email@example.com"</span>,
+  <span class="tok-prop">password</span>:  <span class="tok-str">"..."</span>,
+  <span class="tok-prop">role</span>:      <span class="tok-str">"admin"</span> <span class="tok-comment">| "operator" | "user"</span>,
+  <span class="tok-prop">isActive</span>:  <span class="tok-key">true</span>,
+  <span class="tok-prop">createdAt</span>: <span class="tok-str">"2026-06-03T00:00:00.000Z"</span>
+}</code></pre>
+
+  <h4>pipeon_projects</h4>
+  <pre><code>{
+  <span class="tok-prop">_id</span>:            ObjectId,
+  <span class="tok-prop">slug</span>:           <span class="tok-str">"target-db"</span>,
+  <span class="tok-prop">name</span>:           <span class="tok-str">"[INTERNAL-SYSTEM] Expresso"</span>,
+  <span class="tok-prop">description</span>:    <span class="tok-str">"..."</span>,            <span class="tok-comment">// opcional</span>
+  <span class="tok-prop">targetDatabase</span>: <span class="tok-str">"target-database"</span>,
+  <span class="tok-prop">isActive</span>:       <span class="tok-key">true</span>,
+  <span class="tok-prop">createdAt</span>:      <span class="tok-str">"2026-06-03T00:00:00.000Z"</span>
+}</code></pre>
+
+  <h4>pipeon_procedures</h4>
+  <pre><code>{
+  <span class="tok-prop">_id</span>:         ObjectId,
+  <span class="tok-prop">projectId</span>:   <span class="tok-str">"65a1b2c3d4e5f6a7b8c9d0e1"</span>,  <span class="tok-comment">// _id do pipeon_projects</span>
+  <span class="tok-prop">name</span>:        <span class="tok-str">"Nome do procedimento"</span>,
+  <span class="tok-prop">description</span>: <span class="tok-str">"Descricao resumida"</span>,
+  <span class="tok-prop">isActive</span>:    <span class="tok-key">true</span>,
+  <span class="tok-prop">order</span>:       <span class="tok-fn">0</span>,
+  <span class="tok-prop">createdAt</span>:   <span class="tok-str">"2026-06-03T00:00:00.000Z"</span>,
+  <span class="tok-prop">inputs</span>: [
+    {
+      <span class="tok-prop">key</span>:      <span class="tok-str">"noticeId"</span>,
+      <span class="tok-prop">label</span>:    <span class="tok-str">"ObjectId do edital"</span>,
+      <span class="tok-prop">type</span>:     <span class="tok-str">"objectId"</span>,  <span class="tok-comment">// "string" | "objectId"</span>
+      <span class="tok-prop">required</span>: <span class="tok-key">true</span>
+    }
+  ],
+  <span class="tok-prop">steps</span>: [
+    {
+      <span class="tok-prop">collection</span>: <span class="tok-str">"evaluations"</span>,
+      <span class="tok-prop">operation</span>:  <span class="tok-str">"updateMany"</span>,  <span class="tok-comment">// "updateOne" | "updateMany" | "findOne"</span>
+      <span class="tok-prop">filter</span>:     { <span class="tok-prop">"notice"</span>: <span class="tok-str">"&#123;&#123;noticeId&#125;&#125;"</span> },
+      <span class="tok-prop">update</span>:     { <span class="tok-prop">"$set"</span>: { <span class="tok-prop">"status"</span>: <span class="tok-str">"NOTSTARTED"</span> } }
+    }
+  ]
+}</code></pre>
+
+  <h4>pipeon_operations</h4>
+  <pre><code>{
+  <span class="tok-prop">_id</span>:             ObjectId,
+  <span class="tok-prop">procedureId</span>:    <span class="tok-str">"reset-evaluations"</span>,
+  <span class="tok-prop">procedureName</span>:  <span class="tok-str">"Retornar avaliacoes..."</span>,
+  <span class="tok-prop">projectId</span>:      <span class="tok-str">"target-db"</span>,
+  <span class="tok-prop">projectName</span>:    <span class="tok-str">"[INTERNAL-SYSTEM]"</span>,
+  <span class="tok-prop">ticketId</span>:       <span class="tok-str">"123456"</span>,
+  <span class="tok-prop">executedBy</span>:     <span class="tok-str">"operador@example.com"</span>,
+  <span class="tok-prop">executedByName</span>: <span class="tok-str">"Nome Operador"</span>,
+  <span class="tok-prop">executedAt</span>:     <span class="tok-str">"2026-06-03T14:00:00.000Z"</span>,
+  <span class="tok-prop">database</span>:       <span class="tok-str">"target-database"</span>,
+  <span class="tok-prop">status</span>:         <span class="tok-str">"success"</span>,  <span class="tok-comment">// "success" | "error"</span>
+  <span class="tok-prop">affectedDocs</span>:   { <span class="tok-prop">"evaluations"</span>: <span class="tok-fn">42</span> },
+  <span class="tok-prop">error</span>:          <span class="tok-str">"mensagem de erro"</span>  <span class="tok-comment">// apenas se status === "error"</span>
+}</code></pre>
+
+  <h4>pipeon_scheduled</h4>
+  <pre><code>{
+  <span class="tok-prop">_id</span>:              ObjectId,
+  <span class="tok-prop">procedureName</span>:   <span class="tok-str">"Retornar avaliacoes..."</span>,
+  <span class="tok-prop">ticket</span>:          <span class="tok-str">"123456"</span>,
+  <span class="tok-prop">noticeId</span>:        <span class="tok-str">"65a1b2c3d4e5f6a7b8c9d0e1"</span>,
+  <span class="tok-prop">evaluatorUserId</span>: <span class="tok-str">"65a1b2c3d4e5f6a7b8c9d0e2"</span>,
+  <span class="tok-prop">evaluatorName</span>:   <span class="tok-str">"Nome Avaliador"</span>,
+  <span class="tok-prop">evaluatorEmail</span>:  <span class="tok-str">"avaliador@email.com"</span>,
+  <span class="tok-prop">scheduledFor</span>:    <span class="tok-str">"2026-06-05T08:00:00.000Z"</span>,
+  <span class="tok-prop">scheduledBy</span>:     <span class="tok-str">"operador@example.com"</span>,
+  <span class="tok-prop">database</span>:        <span class="tok-str">"target-database"</span>,
+  <span class="tok-prop">connectionString</span>: <span class="tok-str">"mongodb://..."</span>,  <span class="tok-comment">// opcional</span>
+  <span class="tok-prop">recurring</span>:       <span class="tok-key">false</span>,
+  <span class="tok-prop">recurringTime</span>:   <span class="tok-str">"08:00"</span>,  <span class="tok-comment">// HH:MM — apenas se recurring: true</span>
+  <span class="tok-prop">status</span>:          <span class="tok-str">"pending"</span>,  <span class="tok-comment">// "pending" | "executed" | "cancelled" | "failed"</span>
+  <span class="tok-prop">createdAt</span>:       <span class="tok-str">"2026-06-03T14:00:00.000Z"</span>,
+  <span class="tok-prop">executedAt</span>:      <span class="tok-str">"..."</span>,    <span class="tok-comment">// preenchido apos execucao</span>
+  <span class="tok-prop">autoExecuted</span>:    <span class="tok-key">true</span>,    <span class="tok-comment">// true se executado pelo cron</span>
+  <span class="tok-prop">failError</span>:       <span class="tok-str">"..."</span>    <span class="tok-comment">// preenchido em caso de falha</span>
+}</code></pre>
+
+  <h4>pipeon_settings</h4>
+  <pre><code><span class="tok-comment">// Documento principal: _id = "role_permissions"</span>
+{
+  <span class="tok-prop">_id</span>:      <span class="tok-str">"role_permissions"</span>,
+  <span class="tok-prop">operator</span>: [<span class="tok-str">"procedure"</span>, <span class="tok-str">"history"</span>, <span class="tok-str">"restore"</span>],
+  <span class="tok-prop">user</span>:     [<span class="tok-str">"procedure"</span>, <span class="tok-str">"history"</span>, <span class="tok-str">"restore"</span>]
+}</code></pre>
+
+  <h4>pipeon_auto_backups</h4>
+  <pre><code>{
+  <span class="tok-prop">_id</span>:             ObjectId,
+  <span class="tok-prop">ticket</span>:          <span class="tok-str">"123456"</span>,
+  <span class="tok-prop">noticeId</span>:        <span class="tok-str">"..."</span>,
+  <span class="tok-prop">evaluatorUserId</span>: <span class="tok-str">"..."</span>,
+  <span class="tok-prop">evaluatorName</span>:   <span class="tok-str">"..."</span>,
+  <span class="tok-prop">evaluatorEmail</span>:  <span class="tok-str">"..."</span>,
+  <span class="tok-prop">database</span>:        <span class="tok-str">"target-database"</span>,
+  <span class="tok-prop">documentCount</span>:   <span class="tok-fn">42</span>,
+  <span class="tok-prop">documents</span>:       [...],  <span class="tok-comment">// snapshot completo dos documentos</span>
+  <span class="tok-prop">executionType</span>:   <span class="tok-str">"manual"</span>,  <span class="tok-comment">// "manual" | "auto"</span>
+  <span class="tok-prop">createdAt</span>:       <span class="tok-str">"..."</span>,
+  <span class="tok-prop">scheduledId</span>:     <span class="tok-str">"..."</span>  <span class="tok-comment">// presente se executado via cron</span>
+}</code></pre>
+
+  <h3>Banco: target-database (somente leitura pelo Pipeon)</h3>
+  <table class="tbl">
+    <thead><tr><th>Colecao</th><th>Uso no Pipeon</th></tr></thead>
+    <tbody>
+      <tr><td><code>evaluations</code></td><td>Leitura para busca de avaliadores e dry-run; escrita pelo procedimento reset-evaluations</td></tr>
+      <tr><td><code>users</code></td><td>Leitura para resolucao de nome/email dos avaliadores</td></tr>
+      <tr><td><code>submissions</code></td><td>Referencia nas avaliacoes (campo <code>submission.submissionNumber</code>)</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- 06 — API REST -->
+<section class="section" id="s6">
+  <h2><span class="num">06</span> API REST — Endpoints</h2>
+  <p class="lead">Todos os endpoints (exceto login) exigem o header <code>Authorization: Bearer {token}</code>. A base URL e definida por <code>VITE_API_URL</code>.</p>
+
+  <h3>Autenticacao</h3>
+
+  <div class="endpoint-block">
+    <div class="endpoint-header">
+      <span class="endpoint-method method-post">POST</span>
+      <span class="endpoint-path">/api/auth/login</span>
+    </div>
+    <div class="endpoint-body">
+      <p>Autentica o usuario por e-mail e retorna um JWT. Nao requer token.</p>
+      <div class="two-col">
+        <div>
+          <p><strong>Body</strong></p>
+          <pre><code>{ <span class="tok-prop">"email"</span>: <span class="tok-str">"operador@example.com"</span> }</code></pre>
+        </div>
+        <div>
+          <p><strong>Response 200</strong></p>
+          <pre><code>{ <span class="tok-prop">"token"</span>: <span class="tok-str">"eyJhbGci..."</span> }</code></pre>
+        </div>
+      </div>
+      <p><strong>Erros:</strong> <code>400</code> e-mail ausente | <code>401</code> usuario nao encontrado | <code>500</code> erro interno</p>
+    </div>
+  </div>
+
+  <h3>MongoDB Proxy (banco-alvo)</h3>
+  <p>Rota generica para todas as operacoes MongoDB no banco selecionado na sessao.</p>
+
+  <div class="endpoint-block">
+    <div class="endpoint-header">
+      <span class="endpoint-method method-post">POST</span>
+      <span class="endpoint-path">/api/mongodb/:action</span>
+    </div>
+    <div class="endpoint-body">
+      <p>Actions disponíveis: <code>find</code> | <code>findOne</code> | <code>insertOne</code> | <code>updateOne</code> | <code>updateMany</code> | <code>replaceOne</code> | <code>aggregate</code></p>
+      <p><strong>Body base (obrigatorio em todos):</strong></p>
+      <pre><code>{
+  <span class="tok-prop">"database"</span>:         <span class="tok-str">"target-database"</span>,
+  <span class="tok-prop">"connectionString"</span>: <span class="tok-str">"mongodb://..."</span>,  <span class="tok-comment">// opcional</span>
+  <span class="tok-prop">"collection"</span>:       <span class="tok-str">"evaluations"</span>,
+  <span class="tok-comment">// campos adicionais variam por action (abaixo)</span>
+}</code></pre>
+      <table class="tbl">
+        <thead><tr><th>Action</th><th>Campos adicionais</th><th>Response</th></tr></thead>
+        <tbody>
+          <tr><td><code>find</code></td><td><code>filter?</code>, <code>projection?</code>, <code>limit?</code></td><td><code>{ documents: [] }</code></td></tr>
+          <tr><td><code>findOne</code></td><td><code>filter?</code>, <code>projection?</code></td><td><code>{ document: {} | null }</code></td></tr>
+          <tr><td><code>insertOne</code></td><td><code>document</code></td><td><code>{ insertedId, acknowledged }</code></td></tr>
+          <tr><td><code>updateOne</code></td><td><code>filter</code>, <code>update</code>, <code>upsert?</code></td><td><code>{ matchedCount, modifiedCount }</code></td></tr>
+          <tr><td><code>updateMany</code></td><td><code>filter</code>, <code>update</code></td><td><code>{ matchedCount, modifiedCount }</code></td></tr>
+          <tr><td><code>replaceOne</code></td><td><code>filter</code>, <code>replacement</code>, <code>upsert?</code></td><td><code>{ matchedCount, modifiedCount }</code></td></tr>
+          <tr><td><code>aggregate</code></td><td><code>pipeline: []</code></td><td><code>{ documents: [] }</code></td></tr>
+        </tbody>
+      </table>
+      <div class="callout">
+        <strong>Extended JSON</strong>
+        Suporte a <code>{ "$oid": "..." }</code> (converte para ObjectId) e <code>{ "$date": "..." }</code> (converte para Date).
+      </div>
+    </div>
+  </div>
+
+  <h3>Usuarios</h3>
+
+  <div class="endpoint-block">
+    <div class="endpoint-header">
+      <span class="endpoint-method method-get">GET</span>
+      <span class="endpoint-path">/api/users</span>
+    </div>
+    <div class="endpoint-body">
+      <p>Lista todos os usuarios do banco pipeon.</p>
+      <pre><code><span class="tok-comment">// Response 200</span>
+{ <span class="tok-prop">"documents"</span>: [{ <span class="tok-prop">id</span>, <span class="tok-prop">name</span>, <span class="tok-prop">email</span>, <span class="tok-prop">role</span>, <span class="tok-prop">isActive</span>, <span class="tok-prop">createdAt</span> }] }</code></pre>
+    </div>
+  </div>
+
+  <div class="endpoint-block">
+    <div class="endpoint-header">
+      <span class="endpoint-method method-post">POST</span>
+      <span class="endpoint-path">/api/users</span>
+    </div>
+    <div class="endpoint-body">
+      <div class="two-col">
+        <div><p><strong>Body</strong></p><pre><code>{ <span class="tok-prop">name</span>, <span class="tok-prop">email</span>, <span class="tok-prop">password</span>, <span class="tok-prop">role</span> }</code></pre></div>
+        <div><p><strong>Response 200</strong></p><pre><code>{ <span class="tok-prop">"id"</span>: <span class="tok-str">"..."</span> }</code></pre></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="endpoint-block">
+    <div class="endpoint-header">
+      <span class="endpoint-method method-post">POST</span>
+      <span class="endpoint-path">/api/users/:id/update</span>
+    </div>
+    <div class="endpoint-body">
+      <div class="two-col">
+        <div><p><strong>Body</strong></p><pre><code>{ <span class="tok-prop">role</span>: <span class="tok-str">"operator"</span>, <span class="tok-prop">isActive</span>: <span class="tok-key">false</span> }</code></pre></div>
+        <div><p><strong>Response 200</strong></p><pre><code>{ <span class="tok-prop">"success"</span>: <span class="tok-key">true</span> }</code></pre></div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Agendamentos</h3>
+
+  <div class="endpoint-block">
+    <div class="endpoint-header">
+      <span class="endpoint-method method-get">GET</span>
+      <span class="endpoint-path">/api/pipeon/scheduled</span>
+    </div>
+    <div class="endpoint-body">
+      <p>Retorna todos os agendamentos (maximo 200, ordenado por <code>scheduledFor</code> DESC).</p>
+      <pre><code>{ <span class="tok-prop">"documents"</span>: [<span class="tok-comment">ScheduledProcedure[]</span>] }</code></pre>
+    </div>
+  </div>
+
+  <div class="endpoint-block">
+    <div class="endpoint-header">
+      <span class="endpoint-method method-get">GET</span>
+      <span class="endpoint-path">/api/pipeon/scheduled/due</span>
+    </div>
+    <div class="endpoint-body">
+      <p>Retorna somente os pendentes com <code>scheduledFor &lt;= agora</code>. Usado pelo cron e pela tela de agendamentos.</p>
+    </div>
+  </div>
+
+  <div class="endpoint-block">
+    <div class="endpoint-header">
+      <span class="endpoint-method method-post">POST</span>
+      <span class="endpoint-path">/api/pipeon/scheduled</span>
+    </div>
+    <div class="endpoint-body">
+      <p>Cria um novo agendamento.</p>
+      <pre><code><span class="tok-comment">// Body: objeto ScheduledProcedure sem _id</span>
+{ <span class="tok-prop">"insertedId"</span>: <span class="tok-str">"..."</span> }</code></pre>
+    </div>
+  </div>
+
+  <div class="endpoint-block">
+    <div class="endpoint-header">
+      <span class="endpoint-method method-post">POST</span>
+      <span class="endpoint-path">/api/pipeon/scheduled/:id/cancel</span>
+    </div>
+    <div class="endpoint-body">
+      <p>Cancela um agendamento — seta <code>status: "cancelled"</code>.</p>
+    </div>
+  </div>
+
+  <div class="endpoint-block">
+    <div class="endpoint-header">
+      <span class="endpoint-method method-post">POST</span>
+      <span class="endpoint-path">/api/pipeon/scheduled/:id/executed</span>
+    </div>
+    <div class="endpoint-body">
+      <p>Marca um agendamento como executado — seta <code>status: "executed"</code> e <code>executedAt: now</code>.</p>
+    </div>
+  </div>
+
+  <h3>Settings</h3>
+
+  <div class="endpoint-block">
+    <div class="endpoint-header">
+      <span class="endpoint-method method-get">GET</span>
+      <span class="endpoint-path">/api/pipeon/settings/:docId</span>
+    </div>
+    <div class="endpoint-body">
+      <p>Busca um documento de configuracao por ID. Principal uso: <code>docId = "role_permissions"</code>.</p>
+      <pre><code>{ <span class="tok-prop">"document"</span>: {} <span class="tok-comment">| null</span> }</code></pre>
+    </div>
+  </div>
+
+  <div class="endpoint-block">
+    <div class="endpoint-header">
+      <span class="endpoint-method method-post">POST</span>
+      <span class="endpoint-path">/api/pipeon/settings/:docId</span>
+    </div>
+    <div class="endpoint-body">
+      <p>Salva ou atualiza um documento de configuracao (replaceOne com upsert).</p>
+    </div>
+  </div>
+
+  <h3>Projetos</h3>
+
+  <div class="endpoint-block">
+    <div class="endpoint-header">
+      <span class="endpoint-method method-get">GET</span>
+      <span class="endpoint-path">/api/pipeon/projects</span>
+    </div>
+    <div class="endpoint-body">
+      <p>Lista todos os projetos ordenados por <code>name</code>.</p>
+      <pre><code>{ <span class="tok-prop">"documents"</span>: [<span class="tok-comment">Project[]</span>] }</code></pre>
+    </div>
+  </div>
+
+  <div class="endpoint-block">
+    <div class="endpoint-header">
+      <span class="endpoint-method method-post">POST</span>
+      <span class="endpoint-path">/api/pipeon/projects</span>
+    </div>
+    <div class="endpoint-body">
+      <div class="two-col">
+        <div><p><strong>Body</strong></p><pre><code>{ <span class="tok-prop">slug</span>, <span class="tok-prop">name</span>, <span class="tok-prop">description</span>?, <span class="tok-prop">targetDatabase</span>, <span class="tok-prop">isActive</span> }</code></pre></div>
+        <div><p><strong>Response</strong></p><pre><code>{ <span class="tok-prop">"insertedId"</span>: <span class="tok-str">"..."</span> }</code></pre></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="endpoint-block">
+    <div class="endpoint-header">
+      <span class="endpoint-method method-post">POST</span>
+      <span class="endpoint-path">/api/pipeon/projects/:id/delete</span>
+    </div>
+    <div class="endpoint-body">
+      <p>Remove um projeto pelo ID.</p>
+      <pre><code>{ <span class="tok-prop">"success"</span>: <span class="tok-key">true</span> }</code></pre>
+    </div>
+  </div>
+
+  <h3>Catalogo de Procedimentos</h3>
+
+  <div class="endpoint-block">
+    <div class="endpoint-header">
+      <span class="endpoint-method method-get">GET</span>
+      <span class="endpoint-path">/api/pipeon/procedures</span>
+    </div>
+    <div class="endpoint-body">
+      <p>Lista procedimentos ordenados por <code>order</code> e <code>name</code>. Query opcional: <code>?projectId=</code></p>
+      <pre><code>{ <span class="tok-prop">"documents"</span>: [<span class="tok-comment">ProcedureCatalog[]</span>] }</code></pre>
+    </div>
+  </div>
+
+  <div class="endpoint-block">
+    <div class="endpoint-header">
+      <span class="endpoint-method method-post">POST</span>
+      <span class="endpoint-path">/api/pipeon/procedures</span>
+    </div>
+    <div class="endpoint-body">
+      <div class="two-col">
+        <div><p><strong>Body</strong></p><pre><code>{ <span class="tok-prop">projectId</span>, <span class="tok-prop">name</span>, <span class="tok-prop">description</span>?,
+  <span class="tok-prop">inputs</span>: [], <span class="tok-prop">steps</span>: [],
+  <span class="tok-prop">isActive</span>, <span class="tok-prop">order</span> }</code></pre></div>
+        <div><p><strong>Response</strong></p><pre><code>{ <span class="tok-prop">"insertedId"</span>: <span class="tok-str">"..."</span> }</code></pre></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="endpoint-block">
+    <div class="endpoint-header">
+      <span class="endpoint-method method-post">POST</span>
+      <span class="endpoint-path">/api/pipeon/procedures/:id/delete</span>
+    </div>
+    <div class="endpoint-body">
+      <p>Remove um procedimento do catalogo.</p>
+    </div>
+  </div>
+
+  <h3>Operacoes (historico)</h3>
+
+  <div class="endpoint-block">
+    <div class="endpoint-header">
+      <span class="endpoint-method method-get">GET</span>
+      <span class="endpoint-path">/api/pipeon/operations</span>
+    </div>
+    <div class="endpoint-body">
+      <p>Query opcional: <code>?ticketId=&amp;procedureId=&amp;projectId=&amp;limit=</code> (maximo 500, padrao 200). Ordenado por <code>executedAt</code> DESC.</p>
+    </div>
+  </div>
+
+  <div class="endpoint-block">
+    <div class="endpoint-header">
+      <span class="endpoint-method method-post">POST</span>
+      <span class="endpoint-path">/api/pipeon/operations</span>
+    </div>
+    <div class="endpoint-body">
+      <p>Registra uma operacao executada. Chamado automaticamente ao final de cada procedimento.</p>
+    </div>
+  </div>
+
+  <h3>Logs</h3>
+
+  <div class="endpoint-block">
+    <div class="endpoint-header">
+      <span class="endpoint-method method-get">GET</span>
+      <span class="endpoint-path">/api/pipeon/logs</span>
+    </div>
+    <div class="endpoint-body">
+      <p>Retorna logs de execucoes automaticas. Query: <code>?limit=</code> (maximo 500, padrao 200).</p>
+    </div>
+  </div>
+
+  <div class="endpoint-block">
+    <div class="endpoint-header">
+      <span class="endpoint-method method-post">POST</span>
+      <span class="endpoint-path">/api/pipeon/logs</span>
+    </div>
+    <div class="endpoint-body">
+      <p>Registra um log de execucao automatica (usado internamente pelo cron).</p>
+    </div>
+  </div>
+
+  <h3>Backup</h3>
+
+  <div class="endpoint-block">
+    <div class="endpoint-header">
+      <span class="endpoint-method method-post">POST</span>
+      <span class="endpoint-path">/api/pipeon/backup/create</span>
+    </div>
+    <div class="endpoint-body">
+      <p>Busca documentos da colecao <code>evaluations</code> no banco-alvo e salva um snapshot completo em <code>pipeon_auto_backups</code>.</p>
+      <div class="two-col">
+        <div>
+          <p><strong>Body</strong></p>
+          <pre><code>{
+  <span class="tok-prop">noticeId</span>:        <span class="tok-str">"..."</span>,  <span class="tok-comment">// obrigatorio</span>
+  <span class="tok-prop">evaluatorUserId</span>: <span class="tok-str">"..."</span>,  <span class="tok-comment">// obrigatorio</span>
+  <span class="tok-prop">ticket</span>?:         <span class="tok-str">"123456"</span>,
+  <span class="tok-prop">evaluatorName</span>?:  <span class="tok-str">"..."</span>,
+  <span class="tok-prop">evaluatorEmail</span>?: <span class="tok-str">"..."</span>,
+  <span class="tok-prop">database</span>?:       <span class="tok-str">"target-database"</span>,
+  <span class="tok-prop">connectionString</span>?: <span class="tok-str">"..."</span>
+}</code></pre>
+        </div>
+        <div>
+          <p><strong>Response 200</strong></p>
+          <pre><code>{
+  <span class="tok-prop">"backupId"</span>:      <span class="tok-str">"..."</span>,
+  <span class="tok-prop">"documentCount"</span>: <span class="tok-fn">42</span>
+}</code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 07 — Procedimentos dinamicos -->
+<section class="section" id="s7">
+  <h2><span class="num">07</span> Procedimentos Dinamicos</h2>
+  <p class="lead">Procedimentos registrados em <code>pipeon_procedures</code> sao executados de forma generica pelo executor dinamico em <code>/procedure/$id</code>.</p>
+
+  <h3>Como registrar um procedimento</h3>
+  <ol class="steps">
+    <li><strong>Acesse /admin &gt; aba Procedimentos</strong><span>Disponivel somente para role admin.</span></li>
+    <li><strong>Preencha os campos do procedimento</strong><span>Informe nome, descricao, inputs necessarios e as operacoes MongoDB a executar nos steps.</span></li>
+    <li><strong>Revise o preview</strong><span>Confira nome, descricao, tabela de inputs e cards de steps.</span></li>
+    <li><strong>Selecione o projeto</strong><span>O procedimento herda o <code>projectId</code> do projeto escolhido.</span></li>
+    <li><strong>Clique em "Registrar procedimento"</strong><span>Salva em <code>pipeon_procedures</code> via <code>POST /api/pipeon/procedures</code>. Aparece automaticamente na lista de <code>/procedure/</code>.</span></li>
+  </ol>
+
+  <h3>Interpolacao de variaveis nos steps</h3>
+  <p>Os valores dos inputs sao substituidos nos campos <code>filter</code> e <code>update</code> dos steps usando o padrao <code>&#123;&#123;nomeDoInput&#125;&#125;</code>.</p>
+
+  <table class="tbl">
+    <thead><tr><th>Tipo do input</th><th>Substituicao</th><th>Exemplo</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>string</code></td>
+        <td>Valor inserido diretamente como string</td>
+        <td><code>"&#123;&#123;ticket&#125;&#125;"</code> → <code>"123456"</code></td>
+      </tr>
+      <tr>
+        <td><code>objectId</code></td>
+        <td><code>"&#123;&#123;nome&#125;&#125;"</code> (com aspas no JSON) → <code>&#123;"$oid":"valor"&#125;</code></td>
+        <td><code>"&#123;&#123;noticeId&#125;&#125;"</code> → <code>&#123;"$oid":"65a1..."&#125;</code></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p><strong>Exemplo de step com variaveis:</strong></p>
+  <pre><code><span class="tok-comment">// Definicao no banco (pipeon_procedures.steps)</span>
+{
+  <span class="tok-prop">"collection"</span>: <span class="tok-str">"evaluations"</span>,
+  <span class="tok-prop">"operation"</span>:  <span class="tok-str">"updateMany"</span>,
+  <span class="tok-prop">"filter"</span>:     { <span class="tok-prop">"notice"</span>: <span class="tok-str">"&#123;&#123;noticeId&#125;&#125;"</span> },
+  <span class="tok-prop">"update"</span>:     { <span class="tok-prop">"$set"</span>: { <span class="tok-prop">"status"</span>: <span class="tok-str">"NOTSTARTED"</span> } }
+}
+
+<span class="tok-comment">// Apos interpolacao (noticeId = "65a1b2c3d4e5f6a7b8c9d0e1", type=objectId)</span>
+{
+  <span class="tok-prop">"collection"</span>: <span class="tok-str">"evaluations"</span>,
+  <span class="tok-prop">"operation"</span>:  <span class="tok-str">"updateMany"</span>,
+  <span class="tok-prop">"filter"</span>:     { <span class="tok-prop">"notice"</span>: { <span class="tok-prop">"$oid"</span>: <span class="tok-str">"65a1b2c3d4e5f6a7b8c9d0e1"</span> } },
+  <span class="tok-prop">"update"</span>:     { <span class="tok-prop">"$set"</span>: { <span class="tok-prop">"status"</span>: <span class="tok-str">"NOTSTARTED"</span> } }
+}</code></pre>
+
+  <h3>Operations suportadas nos steps</h3>
+  <table class="tbl">
+    <thead><tr><th>Operation</th><th>Campos obrigatorios</th><th>Campos opcionais</th></tr></thead>
+    <tbody>
+      <tr><td><code>updateOne</code></td><td><code>filter</code>, <code>update</code></td><td>—</td></tr>
+      <tr><td><code>updateMany</code></td><td><code>filter</code>, <code>update</code></td><td>—</td></tr>
+      <tr><td><code>findOne</code></td><td><code>filter</code></td><td>— (update ignorado)</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- 08 — Scheduler -->
+<section class="section" id="s8">
+  <h2><span class="num">08</span> Scheduler Automatico</h2>
+  <p class="lead">O servidor Express executa um cron a cada minuto que verifica e executa procedimentos agendados automaticamente.</p>
+
+  <div class="callout callout--warn">
+    <strong>Disponibilidade</strong>
+    O scheduler so funciona enquanto o processo <code>local-api/server.js</code> estiver rodando. Em producao (Cloudflare Worker), este recurso precisa de implementacao separada.
+  </div>
+
+  <h3>Fluxo de execucao automatica</h3>
+  <ol class="steps">
+    <li><strong>Busca de pendentes</strong><span>Consulta <code>pipeon_scheduled</code> por documentos com <code>status: "pending"</code> e <code>scheduledFor &lt;= agora</code>.</span></li>
+    <li><strong>Backup automatico</strong><span>Busca os documentos de <code>evaluations</code> no banco-alvo e salva um snapshot em <code>pipeon_auto_backups</code> (banco pipeon).</span></li>
+    <li><strong>Reset de status</strong><span>Executa <code>updateMany</code> com <code>$set: &#123; status: "NOTSTARTED" &#125;</code> e <code>$unset</code> dos campos de avaliacao.</span></li>
+    <li><strong>Limpeza de formulario</strong><span>Executa <code>updateMany</code> com <code>$unset</code> dos campos <code>phaseForm</code>.</span></li>
+    <li><strong>Log</strong><span>Registra resultado detalhado em <code>pipeon_logs</code> (banco pipeon).</span></li>
+    <li><strong>Marcacao como executado</strong><span>Seta <code>status: "executed"</code> e <code>executedAt: now</code> em <code>pipeon_scheduled</code>.</span></li>
+    <li><strong>Recorrencia (se ativo)</strong><span>Se <code>recurring: true</code>, cria automaticamente o proximo agendamento para D+1 no mesmo horario <code>recurringTime</code>.</span></li>
+  </ol>
+
+  <h3>Tratamento de falhas</h3>
+  <p>Em caso de erro em qualquer etapa, o documento em <code>pipeon_scheduled</code> recebe:</p>
+  <pre><code>{
+  <span class="tok-prop">status</span>:    <span class="tok-str">"failed"</span>,
+  <span class="tok-prop">failedAt</span>:  <span class="tok-str">"2026-06-03T14:00:00.000Z"</span>,
+  <span class="tok-prop">failError</span>: <span class="tok-str">"mensagem de erro"</span>
+}</code></pre>
+  <p>O cron continua processando os proximos procedimentos — uma falha nao interrompe os demais.</p>
+</section>
+
+<!-- 09 — Variaveis de ambiente -->
+<section class="section" id="s9">
+  <h2><span class="num">09</span> Variaveis de Ambiente</h2>
+  <p class="lead">Configuracoes separadas para o frontend (Vite) e para o backend Express.</p>
+
+  <h3>Frontend — <code>.env</code> na raiz do projeto</h3>
+  <table class="tbl">
+    <thead><tr><th>Variavel</th><th>Valor (dev)</th><th>Valor (prod)</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>VITE_API_URL</code></td>
+        <td><code>http://localhost:5000</code></td>
+        <td><code>https://your-worker.your-subdomain.workers.dev</code></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Backend — <code>local-api/.env</code></h3>
+  <table class="tbl">
+    <thead><tr><th>Variavel</th><th>Padrao</th><th>Descricao</th></tr></thead>
+    <tbody>
+      <tr><td><code>PIPEON_MONGO_URL</code></td><td><code>mongodb://localhost:27017/</code></td><td>Connection string do MongoDB exclusivo do Pipeon</td></tr>
+      <tr><td><code>PIPEON_DB_NAME</code></td><td><code>pipeon</code></td><td>Nome do banco de dados Pipeon</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- 10 — Regras criticas -->
+<section class="section" id="s10">
+  <h2><span class="num">10</span> Regras Criticas</h2>
+  <p class="lead">Restricoes arquiteturais que nao devem ser violadas sob nenhuma circunstancia.</p>
+
+  <div class="callout callout--danger">
+    <strong>Banco alvo dos procedimentos</strong>
+    Procedimentos no Pipeon so podem operar contra o banco <code>target-database</code>. Nunca apontar logica de procedimento para outros bancos. A pagina <code>/procedure/</code> valida essa restricao antes de permitir qualquer execucao.
+  </div>
+
+  <div class="callout callout--danger">
+    <strong>Separacao de bancos</strong>
+    Dados de metadados do sistema (usuarios, logs, operacoes, agendamentos, backups, procedimentos) devem ser gravados EXCLUSIVAMENTE no banco <code>pipeon</code>. Nunca misturar com dados operacionais.
+  </div>
+
+  <div class="callout callout--warn">
+    <strong>routeTree.gen.ts</strong>
+    O arquivo <code>src/routeTree.gen.ts</code> e gerado automaticamente pelo TanStack Router. Nao edite manualmente — qualquer alteracao sera sobrescrita pelo servidor de desenvolvimento.
+  </div>
+
+  <div class="callout callout--warn">
+    <strong>Autenticacao JWT em dev</strong>
+    Em desenvolvimento, o JWT e assinado com o secret fixo <code>"pipeon-local-dev-secret"</code>. Em producao, substitua por uma variavel de ambiente segura.
+  </div>
+
+  <h3>Resumo das restricoes por colecao</h3>
+  <table class="tbl">
+    <thead><tr><th>Colecao</th><th>Banco</th><th>Escrita permitida para</th></tr></thead>
+    <tbody>
+      <tr><td><code>pipeon_users</code></td><td>pipeon</td><td>Admin via /api/users</td></tr>
+      <tr><td><code>pipeon_projects</code></td><td>pipeon</td><td>Admin via /api/pipeon/projects</td></tr>
+      <tr><td><code>pipeon_procedures</code></td><td>pipeon</td><td>Admin via /api/pipeon/procedures</td></tr>
+      <tr><td><code>pipeon_operations</code></td><td>pipeon</td><td>Sistema apos cada execucao de procedimento</td></tr>
+      <tr><td><code>pipeon_scheduled</code></td><td>pipeon</td><td>Operadores via /api/pipeon/scheduled + cron</td></tr>
+      <tr><td><code>pipeon_settings</code></td><td>pipeon</td><td>Admin via /api/pipeon/settings</td></tr>
+      <tr><td><code>pipeon_logs</code></td><td>pipeon</td><td>Cron (execucoes automaticas)</td></tr>
+      <tr><td><code>pipeon_auto_backups</code></td><td>pipeon</td><td>Procedimento reset-evaluations + cron</td></tr>
+      <tr><td><code>evaluations</code></td><td>target-database</td><td>Procedimentos autorizados (reset-evaluations + dinamicos)</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<footer class="footer">
+  <p><strong>Proximo passo</strong> — Cadastre pelo menos um projeto em <code>/admin &gt; Sistemas</code> e registre o primeiro procedimento dinamico via IA.</p>
+  <p>Documento gerado em 03/06/2026 — Pipeon v1.0 — [COMPANY]</p>
+</footer>
+
+</div>
+</body>
+</html>

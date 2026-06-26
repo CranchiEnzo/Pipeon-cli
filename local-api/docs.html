@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pipeon Local API — Documentação</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f1117;
+      --bg2: #161a24;
+      --bg3: #1e2230;
+      --border: #2a2f42;
+      --primary: #4f7cff;
+      --primary-dim: rgba(79,124,255,.12);
+      --green: #3ecf8e;
+      --green-dim: rgba(62,207,142,.12);
+      --yellow: #f5c542;
+      --yellow-dim: rgba(245,197,66,.12);
+      --red: #f04f4f;
+      --red-dim: rgba(240,79,79,.12);
+      --purple: #a78bfa;
+      --purple-dim: rgba(167,139,250,.12);
+      --cyan: #22d3ee;
+      --cyan-dim: rgba(34,211,238,.12);
+      --text: #e2e8f0;
+      --muted: #64748b;
+      --mono: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    /* ── Layout ── */
+    .layout { display: flex; min-height: 100vh; }
+
+    nav {
+      width: 260px;
+      flex-shrink: 0;
+      background: var(--bg2);
+      border-right: 1px solid var(--border);
+      padding: 24px 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    nav .logo {
+      padding: 0 20px 20px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 16px;
+    }
+    nav .logo h1 { font-size: 16px; font-weight: 700; color: var(--primary); letter-spacing: -.3px; }
+    nav .logo p { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+    nav a {
+      display: block;
+      padding: 7px 20px;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 12.5px;
+      border-left: 2px solid transparent;
+      transition: all .15s;
+    }
+    nav a:hover { color: var(--text); background: var(--bg3); }
+    nav a.active { color: var(--primary); border-left-color: var(--primary); background: var(--primary-dim); }
+    nav .nav-section {
+      padding: 14px 20px 4px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    main {
+      flex: 1;
+      padding: 48px 56px;
+      max-width: 960px;
+    }
+
+    /* ── Typography ── */
+    h1 { font-size: 28px; font-weight: 700; letter-spacing: -.5px; margin-bottom: 8px; }
+    h2 { font-size: 20px; font-weight: 600; margin: 56px 0 16px; padding-top: 8px; border-top: 1px solid var(--border); }
+    h3 { font-size: 14px; font-weight: 600; margin: 28px 0 10px; color: var(--text); }
+    p  { color: var(--muted); margin-bottom: 12px; line-height: 1.7; }
+    p strong { color: var(--text); }
+
+    .subtitle { font-size: 15px; color: var(--muted); margin-bottom: 32px; }
+
+    /* ── Badges ── */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      font-family: var(--mono);
+      letter-spacing: .02em;
+    }
+    .badge-get    { background: var(--green-dim);  color: var(--green);  border: 1px solid rgba(62,207,142,.25); }
+    .badge-post   { background: var(--yellow-dim); color: var(--yellow); border: 1px solid rgba(245,197,66,.25); }
+    .badge-delete { background: var(--red-dim);    color: var(--red);    border: 1px solid rgba(240,79,79,.25); }
+
+    /* ── Endpoint cards ── */
+    .endpoint {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 12px;
+      overflow: hidden;
+    }
+    .endpoint-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 18px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .endpoint-header:hover { background: var(--bg3); }
+    .endpoint-path {
+      font-family: var(--mono);
+      font-size: 13px;
+      flex: 1;
+    }
+    .endpoint-desc { font-size: 12px; color: var(--muted); }
+    .endpoint-arrow { color: var(--muted); font-size: 11px; transition: transform .2s; }
+    .endpoint.open .endpoint-arrow { transform: rotate(90deg); }
+
+    .endpoint-body {
+      display: none;
+      border-top: 1px solid var(--border);
+      padding: 18px;
+    }
+    .endpoint.open .endpoint-body { display: block; }
+
+    /* ── Auth badge ── */
+    .auth-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--purple-dim);
+      color: var(--purple);
+      border: 1px solid rgba(167,139,250,.25);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .no-auth-tag {
+      background: var(--green-dim);
+      color: var(--green);
+      border: 1px solid rgba(62,207,142,.25);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    /* ── Code blocks ── */
+    pre {
+      background: #0a0d14;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      overflow-x: auto;
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height: 1.7;
+      margin: 10px 0;
+    }
+    code { font-family: var(--mono); font-size: 12px; }
+    .inline-code {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-family: var(--mono);
+      font-size: 12px;
+    }
+
+    /* ── Syntax colors ── */
+    .kw  { color: #ff79c6; }
+    .str { color: #f1fa8c; }
+    .num { color: #bd93f9; }
+    .key { color: #8be9fd; }
+    .cmt { color: #6272a4; font-style: italic; }
+    .url { color: var(--green); }
+    .met { color: var(--yellow); font-weight: 700; }
+
+    /* ── Info boxes ── */
+    .info-box {
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin: 14px 0;
+      font-size: 13px;
+      border: 1px solid;
+    }
+    .info-box.blue  { background: var(--primary-dim); border-color: rgba(79,124,255,.3);  color: #93b4ff; }
+    .info-box.green { background: var(--green-dim);   border-color: rgba(62,207,142,.3);  color: #6ee7b7; }
+    .info-box.amber { background: var(--yellow-dim);  border-color: rgba(245,197,66,.3);  color: #fcd34d; }
+
+    /* ── Table ── */
+    table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 13px; }
+    th { text-align: left; padding: 8px 12px; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); border-bottom: 1px solid var(--border); }
+    td { padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    tr:last-child td { border-bottom: none; }
+    td:first-child { font-family: var(--mono); font-size: 12px; color: var(--cyan); white-space: nowrap; }
+    td:nth-child(2) { color: var(--muted); }
+
+    /* ── DB tag ── */
+    .db-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--cyan-dim);
+      border: 1px solid rgba(34,211,238,.2);
+      color: var(--cyan);
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      margin-bottom: 14px;
+    }
+
+    /* ── Param table ── */
+    .param-label { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 14px 0 6px; }
+    .param-row { display: grid; grid-template-columns: 160px 60px 1fr; gap: 8px; align-items: start; padding: 7px 0; border-bottom: 1px solid var(--border); font-size: 12.5px; }
+    .param-row:last-child { border-bottom: none; }
+    .param-name { font-family: var(--mono); color: var(--cyan); }
+    .param-req  { color: var(--red); font-size: 11px; font-weight: 600; }
+    .param-opt  { color: var(--muted); font-size: 11px; }
+    .param-desc { color: var(--muted); }
+
+    /* ── Overview cards ── */
+    .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 20px 0; }
+    .card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px;
+    }
+    .card h4 { font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+    .card p  { font-size: 12px; margin: 0; }
+
+    hr { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+
+    @media (max-width: 768px) {
+      nav { display: none; }
+      main { padding: 24px 20px; }
+      .card-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- ── Sidebar ── -->
+  <nav>
+    <div class="logo">
+      <h1>Pipeon API</h1>
+      <p>Local API — Documentação</p>
+    </div>
+
+    <div class="nav-section">Visão Geral</div>
+    <a href="#overview">Introdução</a>
+    <a href="#autenticacao">Autenticação</a>
+    <a href="#bancos">Separação de bancos</a>
+    <a href="#startup">Startup & Configuração</a>
+
+    <div class="nav-section">Endpoints</div>
+    <a href="#auth">Auth</a>
+    <a href="#users">Usuários</a>
+    <a href="#scheduled">Agendamentos</a>
+    <a href="#logs">Logs / Histórico</a>
+    <a href="#settings">Configurações</a>
+    <a href="#backup">Backups</a>
+    <a href="#proxy">Proxy MongoDB</a>
+
+    <div class="nav-section">Referência</div>
+    <a href="#erros">Códigos de erro</a>
+    <a href="#env">Variáveis de ambiente</a>
+  </nav>
+
+  <!-- ── Main ── -->
+  <main>
+
+    <!-- ── Introdução ── -->
+    <section id="overview">
+      <h1>Pipeon Local API</h1>
+      <p class="subtitle">Servidor Express rodando em <span class="inline-code">http://localhost:5000</span> — intermediário entre o frontend e o MongoDB.</p>
+
+      <div class="card-grid">
+        <div class="card">
+          <h4>🗄 Banco Pipeon</h4>
+          <p>Dados internos do sistema: usuários, logs, agendamentos, backups e configurações. Configurável via <span class="inline-code">PIPEON_MONGO_URL</span>.</p>
+        </div>
+        <div class="card">
+          <h4>🎯 Banco dos Sistemas</h4>
+          <p>Dados de avaliação (<span class="inline-code">target-database</span> etc.). Connection string definida pela sessão selecionada no login.</p>
+        </div>
+        <div class="card">
+          <h4>🔐 Autenticação JWT</h4>
+          <p>Todos os endpoints (exceto <span class="inline-code">/api/auth/login</span>) exigem token Bearer no header <span class="inline-code">Authorization</span>.</p>
+        </div>
+        <div class="card">
+          <h4>⏱ Scheduler</h4>
+          <p>Cron interno verifica a cada minuto procedimentos com <span class="inline-code">scheduledFor ≤ agora</span> e os executa automaticamente.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Autenticação ── -->
+    <section id="autenticacao">
+      <h2>Autenticação</h2>
+      <p>Após o login, inclua o token em todas as requisições:</p>
+      <pre><span class="cmt"># Header obrigatório em todos os endpoints (exceto login)</span>
+<span class="key">Authorization</span>: <span class="str">Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</span></pre>
+      <p>O token expira em <strong>8 horas</strong>. Ao expirar, o frontend redireciona automaticamente para o login.</p>
+    </section>
+
+    <!-- ── Bancos ── -->
+    <section id="bancos">
+      <h2>Separação de bancos</h2>
+      <pre><span class="cmt"># Toda requisição ao Pipeon vai para um de dois caminhos:</span>
+
+Ação do usuário no app
+        │
+        ├── Dados de avaliação (evaluations, notices...)
+        │       └── MongoClient(<span class="str">connectionString da sessão</span>)
+        │               └── db(<span class="str">"target-database"</span>)
+        │
+        └── Dados internos do Pipeon (logs, agendamentos...)
+                └── MongoClient(<span class="str">PIPEON_MONGO_URL</span>)
+                        └── db(<span class="str">"pipeon"</span>)</pre>
+      <div class="info-box amber">
+        <strong>Importante:</strong> os endpoints <span class="inline-code">/api/pipeon/*</span> <em>sempre</em> usam o banco Pipeon, independente da sessão ativa do usuário. Nenhum dado interno é gravado em <span class="inline-code">target-database</span>.
+      </div>
+    </section>
+
+    <!-- ── Startup ── -->
+    <section id="startup">
+      <h2>Startup &amp; Configuração</h2>
+      <p>O servidor lê variáveis do arquivo <span class="inline-code">local-api/.env</span> ao iniciar:</p>
+      <pre><span class="cmt"># local-api/.env</span>
+
+<span class="cmt"># Connection string do MongoDB dedicado ao Pipeon</span>
+<span class="key">PIPEON_MONGO_URL</span>=<span class="str">mongodb://localhost:27017/</span>
+
+<span class="cmt"># Nome do banco dentro do servidor acima (padrão: pipeon)</span>
+<span class="cmt"># PIPEON_DB_NAME=pipeon</span></pre>
+
+      <p>Saída esperada ao iniciar com <span class="inline-code">npm start</span>:</p>
+      <pre><span class="green">Pipeon Local API rodando em http://localhost:5000</span>
+Banco Pipeon  : mongodb://localhost:27017/<span class="str">pipeon</span>
+Banco padrão  : mongodb://localhost:27017/
+Scheduler     : verificando procedimentos a cada minuto</pre>
+    </section>
+
+    <hr>
+
+    <!-- ══════════════════════════════════════════
+         AUTH
+    ══════════════════════════════════════════ -->
+    <section id="auth">
+      <h2>Auth</h2>
+
+      <div class="endpoint" id="ep-login">
+        <div class="endpoint-header" onclick="toggle('ep-login')">
+          <span class="badge badge-post">POST</span>
+          <span class="endpoint-path">/api/auth/login</span>
+          <span class="endpoint-desc">Autenticar usuário e obter token JWT</span>
+          <span class="no-auth-tag">público</span>
+          <span class="endpoint-arrow">▶</span>
+        </div>
+        <div class="endpoint-body">
+          <div class="db-tag">🗄 pipeon · pipeon_users</div>
+          <p>Autentica o usuário pelo e-mail. A senha <strong>não é validada</strong> neste modo — o acesso depende apenas do cadastro no banco Pipeon. Retorna um JWT válido por 8 horas.</p>
+          <div class="param-label">Body (JSON)</div>
+          <div class="param-row"><span class="param-name">email</span><span class="param-req">obrig.</span><span class="param-desc">E-mail cadastrado em pipeon_users</span></div>
+          <pre><span class="cmt">// Request</span>
+<span class="kw">POST</span> <span class="url">/api/auth/login</span>
+{
+  <span class="key">"email"</span>: <span class="str">"usuario@empresa.com"</span>
+}
+
+<span class="cmt">// Response 200</span>
+{
+  <span class="key">"token"</span>: <span class="str">"eyJhbGci..."</span>
+}
+
+<span class="cmt">// Response 401 — e-mail não encontrado</span>
+{ <span class="key">"message"</span>: <span class="str">"Usuario nao encontrado no banco local."</span> }</pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         USERS
+    ══════════════════════════════════════════ -->
+    <section id="users">
+      <h2>Usuários</h2>
+      <p>Gerenciamento dos usuários do sistema Pipeon. Todos os dados ficam em <span class="inline-code">pipeon.pipeon_users</span>.</p>
+
+      <div class="endpoint" id="ep-users-list">
+        <div class="endpoint-header" onclick="toggle('ep-users-list')">
+          <span class="badge badge-get">GET</span>
+          <span class="endpoint-path">/api/users</span>
+          <span class="endpoint-desc">Listar todos os usuários</span>
+          <span class="auth-tag">🔐 auth</span>
+          <span class="endpoint-arrow">▶</span>
+        </div>
+        <div class="endpoint-body">
+          <div class="db-tag">🗄 pipeon · pipeon_users</div>
+          <pre><span class="cmt">// Response 200</span>
+{
+  <span class="key">"documents"</span>: [
+    {
+      <span class="key">"id"</span>: <span class="str">"507f1f77bcf86cd799439011"</span>,
+      <span class="key">"name"</span>: <span class="str">"João Silva"</span>,
+      <span class="key">"email"</span>: <span class="str">"joao@empresa.com"</span>,
+      <span class="key">"role"</span>: <span class="str">"admin"</span>,        <span class="cmt">// "admin" | "operator" | "user"</span>
+      <span class="key">"isActive"</span>: <span class="kw">true</span>,
+      <span class="key">"createdAt"</span>: <span class="str">"2026-01-15T10:00:00.000Z"</span>
+    }
+  ]
+}</pre>
+        </div>
+      </div>
+
+      <div class="endpoint" id="ep-users-create">
+        <div class="endpoint-header" onclick="toggle('ep-users-create')">
+          <span class="badge badge-post">POST</span>
+          <span class="endpoint-path">/api/users</span>
+          <span class="endpoint-desc">Criar novo usuário</span>
+          <span class="auth-tag">🔐 auth</span>
+          <span class="endpoint-arrow">▶</span>
+        </div>
+        <div class="endpoint-body">
+          <div class="db-tag">🗄 pipeon · pipeon_users</div>
+          <div class="param-label">Body (JSON)</div>
+          <div class="param-row"><span class="param-name">name</span><span class="param-req">obrig.</span><span class="param-desc">Nome completo do usuário</span></div>
+          <div class="param-row"><span class="param-name">email</span><span class="param-req">obrig.</span><span class="param-desc">E-mail único de login</span></div>
+          <div class="param-row"><span class="param-name">role</span><span class="param-req">obrig.</span><span class="param-desc"><span class="inline-code">admin</span> | <span class="inline-code">operator</span> | <span class="inline-code">user</span></span></div>
+          <div class="param-row"><span class="param-name">password</span><span class="param-opt">opc.</span><span class="param-desc">Não validado atualmente</span></div>
+          <pre><span class="cmt">// Response 200</span>
+{ <span class="key">"id"</span>: <span class="str">"507f1f77bcf86cd799439011"</span> }</pre>
+        </div>
+      </div>
+
+      <div class="endpoint" id="ep-users-update">
+        <div class="endpoint-header" onclick="toggle('ep-users-update')">
+          <span class="badge badge-post">POST</span>
+          <span class="endpoint-path">/api/users/:id/update</span>
+          <span class="endpoint-desc">Atualizar dados de um usuário</span>
+          <span class="auth-tag">🔐 auth</span>
+          <span class="endpoint-arrow">▶</span>
+        </div>
+        <div class="endpoint-body">
+          <div class="db-tag">🗄 pipeon · pipeon_users</div>
+          <p>Aceita qualquer campo no body — aplica <span class="inline-code">$set</span> nos campos enviados.</p>
+          <pre><span class="cmt">// Exemplo: desativar usuário</span>
+<span class="kw">POST</span> <span class="url">/api/users/507f1f77bcf86cd799439011/update</span>
+{ <span class="key">"isActive"</span>: <span class="kw">false</span> }
+
+<span class="cmt">// Response 200</span>
+{ <span class="key">"success"</span>: <span class="kw">true</span> }</pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         SCHEDULED
+    ══════════════════════════════════════════ -->
+    <section id="scheduled">
+      <h2>Agendamentos</h2>
+      <p>Gerenciamento dos procedimentos agendados. O scheduler verifica <span class="inline-code">pipeon_scheduled</span> a cada minuto e executa automaticamente procedimentos vencidos.</p>
+
+      <div class="endpoint" id="ep-sched-list">
+        <div class="endpoint-header" onclick="toggle('ep-sched-list')">
+          <span class="badge badge-get">GET</span>
+          <span class="endpoint-path">/api/pipeon/scheduled</span>
+          <span class="endpoint-desc">Listar todos os agendamentos</span>
+          <span class="auth-tag">🔐 auth</span>
+          <span class="endpoint-arrow">▶</span>
+        </div>
+        <div class="endpoint-body">
+          <div class="db-tag">🗄 pipeon · pipeon_scheduled</div>
+          <p>Retorna até 200 documentos ordenados por <span class="inline-code">scheduledFor</span> decrescente.</p>
+          <pre><span class="cmt">// Campos do documento retornado</span>
+{
+  <span class="key">"_id"</span>: <span class="str">"507f..."</span>,
+  <span class="key">"procedureName"</span>: <span class="str">"Retornar avaliações para pendentes..."</span>,
+  <span class="key">"ticket"</span>: <span class="str">"123456"</span>,
+  <span class="key">"noticeId"</span>: <span class="str">"65a1b2c3d4e5f6a7b8c9d0e1"</span>,
+  <span class="key">"evaluatorUserId"</span>: <span class="str">"65a1..."</span>,
+  <span class="key">"evaluatorName"</span>: <span class="str">"João Silva"</span>,
+  <span class="key">"evaluatorEmail"</span>: <span class="str">"joao@empresa.com"</span>,
+  <span class="key">"scheduledFor"</span>: <span class="str">"2026-06-10T14:00:00.000Z"</span>,
+  <span class="key">"scheduledBy"</span>: <span class="str">"admin@empresa.com"</span>,
+  <span class="key">"database"</span>: <span class="str">"target-database"</span>,
+  <span class="key">"connectionString"</span>: <span class="str">"mongodb://..."</span>,   <span class="cmt">// null se local</span>
+  <span class="key">"recurring"</span>: <span class="kw">false</span>,
+  <span class="key">"recurringTime"</span>: <span class="kw">null</span>,
+  <span class="key">"status"</span>: <span class="str">"pending"</span>,   <span class="cmt">// pending | executed | cancelled | failed</span>
+  <span class="key">"createdAt"</span>: <span class="str">"2026-06-02T10:00:00.000Z"</span>,
+  <span class="key">"executedAt"</span>: <span class="kw">null</span>,
+  <span class="key">"autoExecuted"</span>: <span class="kw">false</span>
+}</pre>
+        </div>
+      </div>
+
+      <div class="endpoint" id="ep-sched-due">
+        <div class="endpoint-header" onclick="toggle('ep-sched-due')">
+          <span class="badge badge-get">GET</span>
+          <span class="endpoint-path">/api/pipeon/scheduled/due</span>
+          <span class="endpoint-desc">Listar procedimentos pendentes vencidos</span>
+          <span class="auth-tag">🔐 auth</span>
+          <span class="endpoint-arrow">▶</span>
+        </div>
+        <div class="endpoint-body">
+          <div class="db-tag">🗄 pipeon · pipeon_scheduled</div>
+          <p>Retorna documentos com <span class="inline-code">status = "pending"</span> e <span class="inline-code">scheduledFor ≤ agora</span>. Usado pelo frontend para exibir o banner de execução no menu.</p>
+        </div>
+      </div>
+
+      <div class="endpoint" id="ep-sched-create">
+        <div class="endpoint-header" onclick="toggle('ep-sched-create')">
+          <span class="badge badge-post">POST</span>
+          <span class="endpoint-path">/api/pipeon/scheduled</span>
+          <span class="endpoint-desc">Criar novo agendamento</span>
+          <span class="auth-tag">🔐 auth</span>
+          <span class="endpoint-arrow">▶</span>
+        </div>
+        <div class="endpoint-body">
+          <div class="db-tag">🗄 pipeon · pipeon_scheduled</div>
+          <pre><span class="cmt">// Response 200</span>
+{ <span class="key">"insertedId"</span>: <span class="str">"507f1f77bcf86cd799439011"</span> }</pre>
+        </div>
+      </div>
+
+      <div class="endpoint" id="ep-sched-cancel">
+        <div class="endpoint-header" onclick="toggle('ep-sched-cancel')">
+          <span class="badge badge-post">POST</span>
+          <span class="endpoint-path">/api/pipeon/scheduled/:id/cancel</span>
+          <span class="endpoint-desc">Cancelar um agendamento</span>
+          <span class="auth-tag">🔐 auth</span>
+          <span class="endpoint-arrow">▶</span>
+        </div>
+        <div class="endpoint-body">
+          <div class="db-tag">🗄 pipeon · pipeon_scheduled</div>
+          <p>Define <span class="inline-code">status = "cancelled"</span>. O scheduler não executa procedimentos cancelados.</p>
+          <pre>{ <span class="key">"success"</span>: <span class="kw">true</span> }</pre>
+        </div>
+      </div>
+
+      <div class="endpoint" id="ep-sched-executed">
+        <div class="endpoint-header" onclick="toggle('ep-sched-executed')">
+          <span class="badge badge-post">POST</span>
+          <span class="endpoint-path">/api/pipeon/scheduled/:id/executed</span>
+          <span class="endpoint-desc">Marcar como executado manualmente</span>
+          <span class="auth-tag">🔐 auth</span>
+          <span class="endpoint-arrow">▶</span>
+        </div>
+        <div class="endpoint-body">
+          <div class="db-tag">🗄 pipeon · pipeon_scheduled</div>
+          <p>Define <span class="inline-code">status = "executed"</span> e preenche <span class="inline-code">executedAt</span>. Chamado pelo frontend após execução manual de um procedimento agendado.</p>
+          <pre>{ <span class="key">"success"</span>: <span class="kw">true</span> }</pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         LOGS
+    ══════════════════════════════════════════ -->
+    <section id="logs">
+      <h2>Logs / Histórico</h2>
+      <p>Registro auditável de todos os procedimentos executados — manuais e automáticos.</p>
+
+      <div class="endpoint" id="ep-logs-list">
+        <div class="endpoint-header" onclick="toggle('ep-logs-list')">
+          <span class="badge badge-get">GET</span>
+          <span class="endpoint-path">/api/pipeon/logs?limit=200</span>
+          <span class="endpoint-desc">Listar logs de execução</span>
+          <span class="auth-tag">🔐 auth</span>
+          <span class="endpoint-arrow">▶</span>
+        </div>
+        <div class="endpoint-body">
+          <div class="db-tag">🗄 pipeon · pipeon_logs</div>
+          <p>Ordenado por <span class="inline-code">executedAt</span> decrescente. Máximo de 500 documentos por requisição.</p>
+          <div class="param-label">Query params</div>
+          <div class="param-row"><span class="param-name">limit</span><span class="param-opt">opc.</span><span class="param-desc">Número de registros (padrão: 200, máx: 500)</span></div>
+          <pre><span class="cmt">// Campos do documento de log</span>
+{
+  <span class="key">"ticket"</span>: <span class="str">"123456"</span>,
+  <span class="key">"procedureName"</span>: <span class="str">"Retornar avaliações para pendentes..."</span>,
+  <span class="key">"noticeId"</span>: <span class="str">"65a1b2c3d4e5f6a7b8c9d0e1"</span>,
+  <span class="key">"evaluatorName"</span>: <span class="str">"João Silva"</span>,
+  <span class="key">"evaluatorEmail"</span>: <span class="str">"joao@empresa.com"</span>,
+  <span class="key">"evaluatorUserId"</span>: <span class="str">"65a1..."</span>,
+  <span class="key">"executedBy"</span>: <span class="str">"admin@empresa.com"</span>,
+  <span class="key">"executedByName"</span>: <span class="str">"Admin"</span>,
+  <span class="key">"database"</span>: <span class="str">"target-database"</span>,
+  <span class="key">"executedAt"</span>: <span class="str">"2026-06-02T14:30:00.000Z"</span>,
+  <span class="key">"affectedCount"</span>: <span class="num">42</span>,
+  <span class="key">"autoExecuted"</span>: <span class="kw">false</span>,
+  <span class="key">"steps"</span>: [...],
+  <span class="key">"diffSnapshot"</span>: { <span class="key">"before"</span>: {...}, <span class="key">"after"</span>: {...} }
+}</pre>
+        </div>
+      </div>
+
+      <div class="endpoint" id="ep-logs-create">
+        <div class="endpoint-header" onclick="toggle('ep-logs-create')">
+          <span class="badge badge-post">POST</span>
+          <span class="endpoint-path">/api/pipeon/logs</span>
+          <span class="endpoint-desc">Registrar log de execução</span>
+          <span class="auth-tag">🔐 auth</span>
+          <span class="endpoint-arrow">▶</span>
+        </div>
+        <div class="endpoint-body">
+          <div class="db-tag">🗄 pipeon · pipeon_logs</div>
+          <p>Chamado pelo frontend ao final de cada execução de procedimento.</p>
+          <pre><span class="cmt">// Response 200</span>
+{ <span class="key">"insertedId"</span>: <span class="str">"507f1f77bcf86cd799439011"</span> }</pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         SETTINGS
+    ══════════════════════════════════════════ -->
+    <section id="settings">
+      <h2>Configurações</h2>
+      <p>Armazena documentos de configuração do sistema, como permissões por cargo.</p>
+
+      <div class="endpoint" id="ep-settings-get">
+        <div class="endpoint-header" onclick="toggle('ep-settings-get')">
+          <span class="badge badge-get">GET</span>
+          <span class="endpoint-path">/api/pipeon/settings/:docId</span>
+          <span class="endpoint-desc">Buscar documento de configuração</span>
+          <span class="auth-tag">🔐 auth</span>
+          <span class="endpoint-arrow">▶</span>
+        </div>
+        <div class="endpoint-body">
+          <div class="db-tag">🗄 pipeon · pipeon_settings</div>
+          <div class="param-label">Path params</div>
+          <div class="param-row"><span class="param-name">docId</span><span class="param-req">obrig.</span><span class="param-desc">ID do documento. Atualmente em uso: <span class="inline-code">role_permissions</span></span></div>
+          <pre><span class="cmt">// GET /api/pipeon/settings/role_permissions</span>
+{
+  <span class="key">"document"</span>: {
+    <span class="key">"_id"</span>: <span class="str">"role_permissions"</span>,
+    <span class="key">"operator"</span>: [<span class="str">"procedure"</span>, <span class="str">"history"</span>, <span class="str">"restore"</span>, <span class="str">"editais"</span>],
+    <span class="key">"user"</span>: [<span class="str">"procedure"</span>, <span class="str">"history"</span>]
+  }
+}</pre>
+        </div>
+      </div>
+
+      <div class="endpoint" id="ep-settings-set">
+        <div class="endpoint-header" onclick="toggle('ep-settings-set')">
+          <span class="badge badge-post">POST</span>
+          <span class="endpoint-path">/api/pipeon/settings/:docId</span>
+          <span class="endpoint-desc">Criar ou substituir documento de configuração</span>
+          <span class="auth-tag">🔐 auth</span>
+          <span class="endpoint-arrow">▶</span>
+        </div>
+        <div class="endpoint-body">
+          <div class="db-tag">🗄 pipeon · pipeon_settings</div>
+          <p>Usa <span class="inline-code">replaceOne</span> com <span class="inline-code">upsert: true</span> — cria o documento se não existir, substitui se existir.</p>
+          <pre><span class="cmt">// Body — objeto de configuração</span>
+{
+  <span class="key">"operator"</span>: [<span class="str">"procedure"</span>, <span class="str">"history"</span>],
+  <span class="key">"user"</span>: [<span class="str">"history"</span>]
+}
+
+<span class="cmt">// Response 200</span>
+{ <span class="key">"success"</span>: <span class="kw">true</span> }</pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         BACKUP
+    ══════════════════════════════════════════ -->
+    <section id="backup">
+      <h2>Backups</h2>
+      <p>O servidor busca as avaliações diretamente no banco-alvo e salva no banco Pipeon, sem tráfego de documentos via HTTP.</p>
+
+      <div class="endpoint" id="ep-backup-create">
+        <div class="endpoint-header" onclick="toggle('ep-backup-create')">
+          <span class="badge badge-post">POST</span>
+          <span class="endpoint-path">/api/pipeon/backup/create</span>
+          <span class="endpoint-desc">Gerar e salvar backup server-side</span>
+          <span class="auth-tag">🔐 auth</span>
+          <span class="endpoint-arrow">▶</span>
+        </div>
+        <div class="endpoint-body">
+          <div class="db-tag">🗄 pipeon · pipeon_auto_backups</div>
+          <div class="info-box green">
+            O servidor conecta simultaneamente ao banco-alvo (para ler as avaliações) e ao banco Pipeon (para salvar o backup). Chamado durante execuções manuais e automáticas (cron).
+          </div>
+          <div class="param-label">Body (JSON)</div>
+          <div class="param-row"><span class="param-name">noticeId</span><span class="param-req">obrig.</span><span class="param-desc">ObjectId do edital (string hex 24 chars)</span></div>
+          <div class="param-row"><span class="param-name">evaluatorUserId</span><span class="param-req">obrig.</span><span class="param-desc">ObjectId do avaliador</span></div>
+          <div class="param-row"><span class="param-name">ticket</span><span class="param-opt">opc.</span><span class="param-desc">Número do chamado</span></div>
+          <div class="param-row"><span class="param-name">evaluatorName</span><span class="param-opt">opc.</span><span class="param-desc">Nome do avaliador</span></div>
+          <div class="param-row"><span class="param-name">evaluatorEmail</span><span class="param-opt">opc.</span><span class="param-desc">E-mail do avaliador</span></div>
+          <div class="param-row"><span class="param-name">database</span><span class="param-opt">opc.</span><span class="param-desc">Nome do banco-alvo (padrão: target-database)</span></div>
+          <div class="param-row"><span class="param-name">connectionString</span><span class="param-opt">opc.</span><span class="param-desc">Connection string do banco-alvo (padrão: localhost)</span></div>
+          <pre><span class="cmt">// Response 200</span>
+{
+  <span class="key">"backupId"</span>: <span class="str">"507f1f77bcf86cd799439011"</span>,
+  <span class="key">"documentCount"</span>: <span class="num">42</span>
+}
+
+<span class="cmt">// Documento salvo em pipeon_auto_backups</span>
+{
+  <span class="key">"ticket"</span>: <span class="str">"123456"</span>,
+  <span class="key">"noticeId"</span>: <span class="str">"65a1..."</span>,
+  <span class="key">"evaluatorName"</span>: <span class="str">"João Silva"</span>,
+  <span class="key">"database"</span>: <span class="str">"target-database"</span>,
+  <span class="key">"documentCount"</span>: <span class="num">42</span>,
+  <span class="key">"executionType"</span>: <span class="str">"manual"</span>,  <span class="cmt">// "manual" | "automatic"</span>
+  <span class="key">"createdAt"</span>: <span class="str">"2026-06-02T14:30:00.000Z"</span>,
+  <span class="key">"documents"</span>: [...]   <span class="cmt">// array completo das avaliações</span>
+}</pre>
+          <div class="info-box blue">
+            <strong>Como encontrar backups no MongoDB:</strong><br>
+            <code>use pipeon</code><br>
+            <code>db.pipeon_auto_backups.find({ ticket: "123456" })</code><br>
+            <code>db.pipeon_auto_backups.find({ evaluatorEmail: "joao@..." })</code>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         PROXY
+    ══════════════════════════════════════════ -->
+    <section id="proxy">
+      <h2>Proxy MongoDB genérico</h2>
+      <p>Endpoint flexível que roteia operações MongoDB para qualquer banco e collection. Usado pelo frontend para todas as operações nos dados de avaliação.</p>
+
+      <div class="endpoint" id="ep-proxy">
+        <div class="endpoint-header" onclick="toggle('ep-proxy')">
+          <span class="badge badge-post">POST</span>
+          <span class="endpoint-path">/api/mongodb/:action</span>
+          <span class="endpoint-desc">Executar operação MongoDB</span>
+          <span class="auth-tag">🔐 auth</span>
+          <span class="endpoint-arrow">▶</span>
+        </div>
+        <div class="endpoint-body">
+          <div class="info-box amber">
+            <strong>Atenção:</strong> este endpoint conecta ao banco definido no body, usando a connection string da sessão ativa. <em>Não</em> deve ser usado para coleções do Pipeon — use os endpoints <span class="inline-code">/api/pipeon/*</span> para isso.
+          </div>
+          <div class="param-label">Actions disponíveis em :action</div>
+          <table>
+            <thead><tr><th>Action</th><th>Equivalente MongoDB</th></tr></thead>
+            <tbody>
+              <tr><td>find</td><td>collection.find(filter)</td></tr>
+              <tr><td>findOne</td><td>collection.findOne(filter)</td></tr>
+              <tr><td>insertOne</td><td>collection.insertOne(document)</td></tr>
+              <tr><td>updateOne</td><td>collection.updateOne(filter, update)</td></tr>
+              <tr><td>updateMany</td><td>collection.updateMany(filter, update)</td></tr>
+              <tr><td>replaceOne</td><td>collection.replaceOne(filter, replacement)</td></tr>
+              <tr><td>aggregate</td><td>collection.aggregate(pipeline)</td></tr>
+            </tbody>
+          </table>
+          <div class="param-label">Body (JSON) — campos comuns</div>
+          <div class="param-row"><span class="param-name">database</span><span class="param-req">obrig.</span><span class="param-desc">Nome do banco (ex: target-database)</span></div>
+          <div class="param-row"><span class="param-name">collection</span><span class="param-req">obrig.</span><span class="param-desc">Nome da collection (ex: evaluations)</span></div>
+          <div class="param-row"><span class="param-name">connectionString</span><span class="param-opt">opc.</span><span class="param-desc">MongoDB URI (padrão: localhost:27017)</span></div>
+          <div class="param-row"><span class="param-name">filter</span><span class="param-opt">opc.</span><span class="param-desc">Filtro MongoDB. Suporta <span class="inline-code">{"$oid":"..."}</span> e <span class="inline-code">{"$date":"..."}</span></span></div>
+          <div class="param-row"><span class="param-name">pipeline</span><span class="param-opt">opc.</span><span class="param-desc">Pipeline de agregação (apenas action aggregate)</span></div>
+          <pre><span class="cmt">// Exemplo — buscar avaliações de um edital</span>
+<span class="kw">POST</span> <span class="url">/api/mongodb/find</span>
+{
+  <span class="key">"database"</span>: <span class="str">"target-database"</span>,
+  <span class="key">"collection"</span>: <span class="str">"evaluations"</span>,
+  <span class="key">"filter"</span>: {
+    <span class="key">"notice"</span>: { <span class="key">"$oid"</span>: <span class="str">"65a1b2c3d4e5f6a7b8c9d0e1"</span> }
+  },
+  <span class="key">"limit"</span>: <span class="num">100</span>
+}
+
+<span class="cmt">// Response 200</span>
+{ <span class="key">"documents"</span>: [...] }</pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         ERROS
+    ══════════════════════════════════════════ -->
+    <section id="erros">
+      <h2>Códigos de erro</h2>
+      <table>
+        <thead><tr><th>Status</th><th>Significado</th></tr></thead>
+        <tbody>
+          <tr><td>400</td><td>Parâmetros obrigatórios ausentes no body</td></tr>
+          <tr><td>401</td><td>Token ausente, inválido ou expirado</td></tr>
+          <tr><td>500</td><td>Erro interno (MongoDB inacessível, operação inválida etc.)</td></tr>
+        </tbody>
+      </table>
+      <pre><span class="cmt">// Formato padrão de erro</span>
+{ <span class="key">"error"</span>: <span class="str">"Mensagem descritiva do erro"</span> }</pre>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         ENV
+    ══════════════════════════════════════════ -->
+    <section id="env">
+      <h2>Variáveis de ambiente</h2>
+      <p>Arquivo: <span class="inline-code">local-api/.env</span></p>
+      <table>
+        <thead><tr><th>Variável</th><th>Padrão</th><th>Descrição</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>PIPEON_MONGO_URL</td>
+            <td style="color:var(--muted)">mongodb://localhost:27017/</td>
+            <td style="color:var(--muted)">Connection string do MongoDB exclusivo do Pipeon</td>
+          </tr>
+          <tr>
+            <td>PIPEON_DB_NAME</td>
+            <td style="color:var(--muted)">pipeon</td>
+            <td style="color:var(--muted)">Nome do banco dentro do servidor Pipeon</td>
+          </tr>
+        </tbody>
+      </table>
+      <pre><span class="cmt"># Exemplo com Atlas dedicado para o Pipeon:</span>
+<span class="key">PIPEON_MONGO_URL</span>=<span class="str">mongodb+srv://usuario:senha@cluster.mongodb.net/</span>
+<span class="key">PIPEON_DB_NAME</span>=<span class="str">pipeon</span></pre>
+      <div class="info-box blue">
+        Após editar o <span class="inline-code">.env</span>, reinicie o servidor com <span class="inline-code">npm start</span> para que as alterações sejam aplicadas.
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+  function toggle(id) {
+    const el = document.getElementById(id);
+    el.classList.toggle('open');
+  }
+
+  // Highlight nav link on scroll
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('nav a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 120) current = s.id;
+    });
+    navLinks.forEach(a => {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    });
+  }, { passive: true });
+</script>
+
+</body>
+</html>

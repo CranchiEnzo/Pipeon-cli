@@ -1,0 +1,250 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+}
+
+/* ── Light theme (default) ─────────────────────────────── */
+:root {
+  --radius: 0.625rem;
+  --background: oklch(0.90 0.026 228);
+  --foreground: oklch(0.16 0.034 235);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.16 0.034 235);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.16 0.034 235);
+  --primary: oklch(0.52 0.22 258);
+  --primary-foreground: oklch(0.99 0 0);
+  --secondary: oklch(0.94 0.014 228);
+  --secondary-foreground: oklch(0.16 0.034 235);
+  --muted: oklch(0.94 0.014 228);
+  --muted-foreground: oklch(0.54 0.044 232);
+  --accent: oklch(0.92 0.016 228);
+  --accent-foreground: oklch(0.16 0.034 235);
+  --destructive: oklch(0.62 0.22 27);
+  --destructive-foreground: oklch(0.99 0 0);
+  --success: oklch(0.68 0.18 152);
+  --success-foreground: oklch(0.99 0 0);
+  --border: oklch(0.84 0.028 228);
+  --input: oklch(0.95 0.012 228);
+  --ring: oklch(0.52 0.22 258);
+}
+
+/* ── Dark theme ────────────────────────────────────────── */
+:root.dark {
+  --background: oklch(0.12 0.030 240);
+  --foreground: oklch(0.93 0.018 235);
+  --card: oklch(0.17 0.038 240);
+  --card-foreground: oklch(0.93 0.018 235);
+  --popover: oklch(0.17 0.038 240);
+  --popover-foreground: oklch(0.93 0.018 235);
+  --primary: oklch(0.68 0.19 228);
+  --primary-foreground: oklch(0.12 0.030 240);
+  --secondary: oklch(0.22 0.038 240);
+  --secondary-foreground: oklch(0.93 0.018 235);
+  --muted: oklch(0.20 0.036 240);
+  --muted-foreground: oklch(0.52 0.046 235);
+  --accent: oklch(0.24 0.040 240);
+  --accent-foreground: oklch(0.93 0.018 235);
+  --destructive: oklch(0.62 0.22 27);
+  --destructive-foreground: oklch(0.98 0.005 240);
+  --success: oklch(0.68 0.18 152);
+  --success-foreground: oklch(0.12 0.030 240);
+  --border: oklch(0.26 0.046 240);
+  --input: oklch(0.22 0.038 240);
+  --ring: oklch(0.68 0.19 228);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+  html, body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+}
+
+@layer components {
+  /* ── Neon effects (dark mode only) ─────────────────── */
+  .neon-ambient {
+    display: none;
+  }
+  :root.dark .neon-ambient {
+    display: block;
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background: radial-gradient(
+      ellipse 70% 40% at 50% 20%,
+      color-mix(in oklab, var(--color-primary) 10%, transparent),
+      transparent 70%
+    );
+  }
+
+  .neon-logo-circle {
+    transition: box-shadow 0.3s;
+  }
+  :root.dark .neon-logo-circle {
+    box-shadow:
+      0 0 18px color-mix(in oklab, var(--color-primary) 60%, transparent),
+      0 0 42px color-mix(in oklab, var(--color-primary) 30%, transparent),
+      0 0 0 1px color-mix(in oklab, var(--color-primary) 28%, transparent);
+  }
+
+  :root.dark .neon-title {
+    text-shadow:
+      0 0 16px color-mix(in oklab, var(--color-primary) 65%, transparent),
+      0 0 38px color-mix(in oklab, var(--color-primary) 32%, transparent);
+  }
+
+  /* Card border glow on hover in dark mode */
+  :root.dark .neon-card:hover {
+    box-shadow: 0 0 0 1px color-mix(in oklab, var(--color-primary) 35%, transparent),
+                0 0 18px color-mix(in oklab, var(--color-primary) 15%, transparent);
+  }
+
+  /* ── Menu page: CSS variable overrides scoped to this page ─────────────────── */
+
+  /* Light mode: force light values so DbBadge, ProfileButton etc. look right
+     even if <html> still carries class="dark" at initial load.                   */
+  .menu-page {
+    --card: rgba(255, 255, 255, 0.72);
+    --card-foreground: #1e293b;
+    --popover: rgba(255, 255, 255, 0.95);
+    --popover-foreground: #1e293b;
+    --border: rgba(148, 163, 184, 0.45);
+    --input: rgba(255, 255, 255, 0.60);
+    --foreground: #1e293b;
+    --muted-foreground: #64748b;
+    --primary: #0ea5e9;
+    --primary-foreground: #ffffff;
+    --ring: #0ea5e9;
+    --accent: rgba(240, 249, 255, 0.80);
+    --accent-foreground: #1e293b;
+  }
+
+  /* Dark mode: restore dark theme values so the same components look right. */
+  :root.dark .menu-page {
+    --card: oklch(0.17 0.038 240 / 0.75);
+    --card-foreground: oklch(0.93 0.018 235);
+    --popover: oklch(0.17 0.038 240);
+    --popover-foreground: oklch(0.93 0.018 235);
+    --border: oklch(0.26 0.046 240);
+    --input: oklch(0.22 0.038 240);
+    --foreground: oklch(0.93 0.018 235);
+    --muted-foreground: oklch(0.52 0.046 235);
+    --primary: oklch(0.68 0.19 228);
+    --primary-foreground: oklch(0.12 0.030 240);
+    --ring: oklch(0.68 0.19 228);
+    --accent: oklch(0.24 0.040 240);
+    --accent-foreground: oklch(0.93 0.018 235);
+  }
+
+  /* ── Pipeon logo — theme-aware colors ──────────────────── */
+  .pipeon-logo-circle {
+    fill: #D8E8F0;
+    fill-opacity: 0.72;
+  }
+  :root.dark .pipeon-logo-circle {
+    fill: var(--color-primary);
+    fill-opacity: 0.12;
+  }
+
+  .pipeon-logo-icon {
+    fill: #1A5FE8;
+  }
+  :root.dark .pipeon-logo-icon {
+    fill: var(--color-primary);
+  }
+
+  /* Ambient glow around the logo in dark mode — drop-shadow respects the circle shape */
+  :root.dark .pipeon-logo-svg {
+    filter:
+      drop-shadow(0 0 10px color-mix(in oklab, var(--color-primary) 55%, transparent))
+      drop-shadow(0 0 28px color-mix(in oklab, var(--color-primary) 28%, transparent));
+  }
+
+  /* Menu page top radial glow — light mode only (dark mode uses .neon-ambient) */
+  .menu-top-glow {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background: radial-gradient(
+      ellipse 80% 45% at 50% -5%,
+      color-mix(in oklab, var(--color-primary) 12%, transparent),
+      transparent 65%
+    );
+  }
+  :root.dark .menu-top-glow {
+    display: none;
+  }
+
+  .logo-glow {
+    filter: drop-shadow(0 0 14px color-mix(in oklab, var(--color-primary) 55%, transparent));
+  }
+  .input {
+    width: 100%;
+    background: var(--color-input);
+    border: 1px solid var(--color-border);
+    border-radius: 0.5rem;
+    padding: 0.65rem 0.85rem;
+    font-size: 0.9rem;
+    color: var(--color-foreground);
+    outline: none;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  .input:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-primary) 25%, transparent);
+  }
+  .btn-primary {
+    display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+    background: var(--color-primary); color: var(--color-primary-foreground);
+    font-weight: 600; padding: .7rem 1rem; border-radius: .5rem;
+    transition: filter .15s, transform .05s;
+  }
+  .btn-primary:hover { filter: brightness(1.05); }
+  .btn-primary:active { transform: translateY(1px); }
+  .btn-primary:disabled { opacity: .6; cursor: not-allowed; }
+  .btn-ghost {
+    display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+    background: transparent; color: var(--color-foreground);
+    border: 1px solid var(--color-border);
+    font-weight: 500; padding: .65rem 1rem; border-radius: .5rem;
+    transition: background .15s;
+  }
+  .btn-ghost:hover { background: var(--color-accent); }
+}
